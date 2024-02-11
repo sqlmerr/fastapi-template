@@ -28,7 +28,7 @@ class IUnitOfWork(ABC):
         ...
 
 
-class UOW:
+class UOW(IUnitOfWork):
     def __init__(self, session_factory: Any):
         self.session_factory = session_factory
 

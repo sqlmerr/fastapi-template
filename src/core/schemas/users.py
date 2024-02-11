@@ -8,3 +8,23 @@ class UserSchema(BaseModel):
 
 class UserSchemaAdd(BaseModel):
     username: str
+
+
+class UserSchemaEdit(BaseModel):
+    username: str
+
+
+class UserGetResponse(BaseModel):
+    user: UserSchema
+
+
+class UserCreateResponse(BaseModel):
+    user_id: int
+
+
+class UserEditResponse(BaseModel):
+    user_id: int
+
+
+class UserDeleteResponse(BaseModel):
+    status: bool
