@@ -1,2 +1,2 @@
 run-dev:
-	uvicorn --factory src.main:create_app --reload
+	uvicorn --factory app.main:create_app --reload

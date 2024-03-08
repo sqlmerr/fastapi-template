@@ -14,3 +14,5 @@ pip install -r requirements.txt
 ```bash
 make run-dev
 ```
+
+### [Thanks to Tishka17's repository](https://github.com/Tishka17/deseos17/tree/master)
