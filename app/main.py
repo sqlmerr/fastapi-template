@@ -5,24 +5,21 @@ from fastapi import FastAPI
 from app.presentation.api import root_router
 from app.ioc import IoC, InteractorFactory
 from app.config import settings
+from app.di import IocProvider
 
-
-DependencyT = TypeVar("DependencyT")
-
-
-def singleton(value: DependencyT) -> Callable[[], DependencyT]:
-    """Produce save value as a fastapi dependency."""
-
-    def singleton_factory() -> DependencyT:
-        return value
-
-    return singleton_factory
+from dishka import make_async_container
+from dishka.integrations.fastapi import (
+    FromDishka,
+    inject,
+    setup_dishka,
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Put here your logic
     yield
+    await app.state.dishka_container.close()
 
 
 def create_app() -> FastAPI:
@@ -33,6 +30,8 @@ def create_app() -> FastAPI:
     )
     app.include_router(root_router)
     ioc = IoC()
-    app.dependency_overrides.update({InteractorFactory: singleton(ioc)})
+    
+    container = make_async_container(IocProvider(ioc))
+    setup_dishka(container, app)
 
     return app
