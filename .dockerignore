@@ -1,0 +1,3 @@
+requirements_dev.txt
+venv/
+db.db

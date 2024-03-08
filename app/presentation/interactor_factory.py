@@ -10,9 +10,7 @@ class InteractorFactory(ABC):
         self,
     ) -> Authenticate:
         raise NotImplementedError
-    
+
     @abstractmethod
-    async def register(
-        self
-    ) -> Register:
+    async def register(self) -> Register:
         raise NotImplementedError

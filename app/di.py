@@ -29,4 +29,3 @@ class IocProvider(Provider):
     @provide(scope=Scope.REQUEST)
     def get_ioc(self) -> InteractorFactory:
         return self.ioc
-

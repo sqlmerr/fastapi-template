@@ -14,7 +14,8 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.get("/get")
 @inject
 async def get_user(
-    data: Annotated[LoginDTO, Depends()], ioc: Annotated[InteractorFactory, FromDishka()]
+    data: Annotated[LoginDTO, Depends()],
+    ioc: Annotated[InteractorFactory, FromDishka()],
 ):
     async with ioc.authenticate() as interactor:
         return await interactor(data)
@@ -23,7 +24,7 @@ async def get_user(
 @router.post("/create")
 @inject
 async def create_user(
-    data:  UserCreateSchema, ioc: Annotated[InteractorFactory, FromDishka()]
+    data: UserCreateSchema, ioc: Annotated[InteractorFactory, FromDishka()]
 ):
     async with ioc.register() as interactor:
         return await interactor(data)
