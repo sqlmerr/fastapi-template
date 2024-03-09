@@ -1,12 +1,7 @@
 from typing import TypeVar, Callable
 from fastapi import FastAPI
 
-from dishka import (
-    Provider,
-    Scope,
-    provide,
-    make_async_container
-)
+from dishka import Provider, Scope, provide, make_async_container
 from dishka.integrations.fastapi import (
     setup_dishka,
 )
@@ -40,8 +35,4 @@ def init_di(app: FastAPI, ioc: InteractorFactory) -> None:
     container = make_async_container(IocProvider(ioc))
     setup_dishka(container, app)
 
-    app.dependency_overrides.update(
-        {
-            InteractorFactory: singleton(ioc)
-        }
-    )
+    app.dependency_overrides.update({InteractorFactory: singleton(ioc)})

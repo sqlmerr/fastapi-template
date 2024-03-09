@@ -33,7 +33,7 @@ def create_app() -> FastAPI:
             allow_origins=settings.backend_cors_origins,
             allow_methods=("GET", "POST"),
             allow_headers=("*"),
-            allow_credentials=True
+            allow_credentials=True,
         )
 
     return app

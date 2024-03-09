@@ -22,7 +22,7 @@ class DbSettings:
         if not self._url:
             self._url = f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
         return self._url
-    
+
     @url.setter
     def url(self, value: str) -> None:
         self._url = value
@@ -55,10 +55,7 @@ def get_settings() -> Settings:
         get_env_str("POSTGRES_NAME", "postgres"),
         get_env_str("POSTGRES_PASSWORD", "postgres"),
     )
-    settings = Settings(
-        db,
-        get_env_str("SECRET_KEY")
-    )
+    settings = Settings(db, get_env_str("SECRET_KEY"))
     if settings.development is True:
         settings.db.url = "sqlite+aiosqlite:///db.db"
     return settings

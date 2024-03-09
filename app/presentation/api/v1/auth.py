@@ -1,14 +1,14 @@
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from typing import Annotated
 
-from fastapi import Depends, APIRouter, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import Depends, APIRouter, status
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.application.schemas.user import UserSchema, UserCreateSchema
-from app.application.schemas.token import Token, TokenData
+from app.application.schemas.token import Token
 from app.presentation.interactor_factory import InteractorFactory
 from app.application.authenticate import LoginDTO
-from app.utils.jwt import get_password_hash, verify_password, decode, create_access_token
+from app.utils.jwt import get_password_hash, verify_password, create_access_token
 from app.presentation.api.dependencies import CurrentUser
 
 
@@ -28,10 +28,12 @@ async def authenticate_user(username: str, password: str, ioc: InteractorFactory
 @router.post("/token/")
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    ioc: Annotated[InteractorFactory, Depends()]
+    ioc: Annotated[InteractorFactory, Depends()],
 ) -> Token:
     async with ioc.authenticate() as interactor:
-        user = await interactor(LoginDTO(username=form_data.username, password=form_data.password))
+        user = await interactor(
+            LoginDTO(username=form_data.username, password=form_data.password)
+        )
 
     access_token_expires = timedelta(minutes=30)
     access_token = create_access_token(
@@ -41,16 +43,13 @@ async def login_for_access_token(
 
 
 @router.get("/profile/", response_model=UserSchema)
-async def profile(
-    current_user: CurrentUser
-):
+async def profile(current_user: CurrentUser):
     return current_user
 
 
 @router.post("/register/", status_code=status.HTTP_201_CREATED)
 async def register(
-    data: UserCreateSchema,
-    ioc: Annotated[InteractorFactory, Depends()]
+    data: UserCreateSchema, ioc: Annotated[InteractorFactory, Depends()]
 ):
     data.password = get_password_hash(data.password)
     async with ioc.register() as interactor:

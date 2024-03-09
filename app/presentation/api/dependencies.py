@@ -16,7 +16,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token/")
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    ioc: Annotated[InteractorFactory, Depends()]
+    ioc: Annotated[InteractorFactory, Depends()],
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -32,7 +32,9 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
     async with ioc.authenticate() as interactor:
-        user = await interactor(LoginDTO(username=token_data.username, password=None), False)
+        user = await interactor(
+            LoginDTO(username=token_data.username, password=None), False
+        )
     if user is None:
         raise credentials_exception
     if user.disabled:
