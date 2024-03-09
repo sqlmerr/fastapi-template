@@ -1,9 +1,9 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from app.presentation.interactor_factory import InteractorFactory
 from app.application.authenticate import LoginDTO
-from app.application.schemas.user import UserCreateSchema
+from app.application.schemas.user import UserCreateSchema, UserSchema
 
 from dishka.integrations.fastapi import FromDishka, inject
 
@@ -11,7 +11,7 @@ from dishka.integrations.fastapi import FromDishka, inject
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("/get")
+@router.get("/get", response_model=UserSchema)
 @inject
 async def get_user(
     data: Annotated[LoginDTO, Depends()],
@@ -21,10 +21,10 @@ async def get_user(
         return await interactor(data)
 
 
-@router.post("/create")
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 @inject
 async def create_user(
     data: UserCreateSchema, ioc: Annotated[InteractorFactory, FromDishka()]
 ):
     async with ioc.register() as interactor:
-        return await interactor(data)
+        return {"status": await interactor(data)}

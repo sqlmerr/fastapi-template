@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.presentation.api import root_router
 from app.ioc import IoC
@@ -32,16 +33,13 @@ def create_app() -> FastAPI:
     container = make_async_container(IocProvider(ioc))
     setup_dishka(container, app)
 
-    # if settings.backend_cors_origins:
-    #     app.add_middleware(
-    #         CORSMiddleware(
-    #             app,
-    #             allow_origins=settings.backend_cors_origins,
-    #             allow_methods=("GET", "POST"),
-    #             allow_headers=("*"),
-    #             allow_credentials=True
-    #         )
-    #     )
-    # soon
+    if settings.backend_cors_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=settings.backend_cors_origins,
+            allow_methods=("GET", "POST"),
+            allow_headers=("*"),
+            allow_credentials=True
+        )
 
     return app

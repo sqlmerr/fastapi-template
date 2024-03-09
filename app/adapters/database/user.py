@@ -1,8 +1,8 @@
 from sqlalchemy import select, update, insert
+from datetime import datetime
 from typing import Optional
 
 from app.application.common.user_gateway import UserSaver, UserReader, UserCreator
-
 from app.application.common.uow import UoW
 from app.domain.entities.user import User
 from app.application.schemas.user import UserUpdateSchema, UserCreateSchema
@@ -35,6 +35,6 @@ class UserGateway(UserReader, UserSaver, UserCreator):
         if not user_dict:
             return
 
-        stmt = insert(User).values(**user_dict)
+        stmt = insert(User).values(**user_dict, registered_at=datetime.utcnow())
         await uow.session.execute(stmt)
         return True

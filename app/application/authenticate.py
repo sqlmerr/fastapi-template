@@ -22,4 +22,4 @@ class Authenticate(Interactor[LoginDTO, int]):
         result = await self.user_reader.get_user_filters(self.uow, **data_dict)
         if result is None:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
-        return UserSchema(id=result.id, username=result.username)
+        return UserSchema(id=result.id, username=result.username, registered_at=result.registered_at)
