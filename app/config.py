@@ -31,6 +31,7 @@ class DbSettings:
 @dataclass
 class Settings:
     db: DbSettings
+    secret_key: str
     app_title: str = "FastAPI template"
     version: str = "0.1.0"
     backend_cors_origins: List[str] = field(
@@ -55,7 +56,8 @@ def get_settings() -> Settings:
         get_env_str("POSTGRES_PASSWORD", "postgres"),
     )
     settings = Settings(
-        db
+        db,
+        get_env_str("SECRET_KEY")
     )
     if settings.development is True:
         settings.db.url = "sqlite+aiosqlite:///db.db"

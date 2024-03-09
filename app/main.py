@@ -6,12 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.presentation.api import root_router
 from app.ioc import IoC
 from app.config import settings
-from app.di import IocProvider
-
-from dishka import make_async_container
-from dishka.integrations.fastapi import (
-    setup_dishka,
-)
+from app.di import init_di
 
 
 @asynccontextmanager
@@ -30,8 +25,7 @@ def create_app() -> FastAPI:
     app.include_router(root_router)
     ioc = IoC()
 
-    container = make_async_container(IocProvider(ioc))
-    setup_dishka(container, app)
+    init_di(app, ioc)
 
     if settings.backend_cors_origins:
         app.add_middleware(
