@@ -9,6 +9,7 @@ from alembic import context
 
 from app.config import settings
 from app.domain.entities.user import User  # noqa: F401
+from app.domain.entities.post import Post  # noqa: F401
 from app.application.common.db import Base
 
 # this is the Alembic Config object, which provides

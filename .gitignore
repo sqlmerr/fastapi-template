@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 db.db
+db.db-journal
