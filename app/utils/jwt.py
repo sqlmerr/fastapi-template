@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta, timezone
+import jwt
 
-from jose import jwt
+from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
 
 from app.config import settings
@@ -21,7 +21,7 @@ def get_password_hash(password):
 
 
 def decode(token: str):
-    return jwt.decode(token, settings.secret_key, algorithms=[ALGORITHM])
+    return jwt.decode(token, settings.secret_key.get_secret_value(), algorithms=[ALGORITHM])
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
@@ -31,5 +31,5 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.secret_key.get_secret_value(), algorithm=ALGORITHM)
     return encoded_jwt
