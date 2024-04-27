@@ -1,4 +1,7 @@
 from contextlib import asynccontextmanager
+from typing import Optional
+
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from app.adapters.database.uow import UnitOfWork
 from app.adapters.database.user import UserGateway
@@ -15,8 +18,10 @@ from app.application.common.db import session_maker
 
 
 class IoC(InteractorFactory):
-    def __init__(self) -> None:
-        self.uow = UnitOfWork(session_maker)
+    def __init__(
+        self, another_session_maker: Optional[async_sessionmaker] = None
+    ) -> None:
+        self.uow = UnitOfWork(another_session_maker or session_maker)
         self.user_gateway = UserGateway()
         self.post_gateway = PostGateway()
 

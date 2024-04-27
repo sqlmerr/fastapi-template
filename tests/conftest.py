@@ -1,26 +1,45 @@
 import pytest
 
 from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from app.application.common.db import session_maker, engine
-from fastapi.testclient import TestClient
-from httpx import AsyncClient
 
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.pool import NullPool
 
-engine_test = create_async_engine("sqlite+aiosqlite:///db.db")
-async_session_maker_test = async_sessionmaker(engine_test)
+from httpx import AsyncClient, ASGITransport
 
-engine = engine_test  # noqa: F811
-session_maker = async_session_maker_test  # noqa: F811
 
 from app.main import create_app  # noqa: E402
+from app.config import settings
+from app.domain.entities.user import User  # noqa: F401
+from app.domain.entities.post import Post  # noqa: F401
+from app.application.common.db import Base
+
+test_engine = create_async_engine(
+    settings.test_db_url.get_secret_value(), poolclass=NullPool
+)
+test_session_maker = async_sessionmaker(test_engine)
+
+app = create_app(test_session_maker)
+# client = TestClient(app)
 
 
-app = create_app()
-client = TestClient(app)
+@pytest.fixture(scope="session", autouse=True)
+async def db():
+    async with test_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
 
 
 @pytest.fixture(scope="session")
-async def ac() -> AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+async def session(db) -> AsyncGenerator[AsyncSession, None]:
+    async with test_session_maker() as test_session:
+        yield test_session
+
+
+@pytest.fixture(scope="session")
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    async with AsyncClient(
+        base_url="http://test", transport=ASGITransport(app=app)
+    ) as ac:
         yield ac
+        await ac.aclose()

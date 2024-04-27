@@ -13,7 +13,7 @@ from app.application.schemas.user import UserSchema
 from dishka.integrations.fastapi import FromDishka, inject
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token/")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 
 
 @inject

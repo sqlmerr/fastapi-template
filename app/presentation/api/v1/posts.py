@@ -14,13 +14,13 @@ from dishka.integrations.fastapi import FromDishka, DishkaRoute
 router = APIRouter(prefix="/posts", tags=["posts"], route_class=DishkaRoute)
 
 
-@router.get("/get/", dependencies=[Depends(get_current_user)])
+@router.get("/get", dependencies=[Depends(get_current_user)])
 async def get_post(post_id: int, ioc: FromDishka[InteractorFactory]) -> PostSchema:
     async with ioc.get_post() as interactor:
         return await interactor(post_id)
 
 
-@router.get("/all/")
+@router.get("/all")
 async def get_all_posts(
     ioc: FromDishka[InteractorFactory],
     user: Annotated[UserSchema, Depends(get_current_user)],
@@ -29,7 +29,7 @@ async def get_all_posts(
         return await interactor(user.id)
 
 
-@router.post("/create/")
+@router.post("/create", status_code=201)
 async def create_post(
     post: PostSchemaCreate,
     ioc: FromDishka[InteractorFactory],
@@ -42,7 +42,7 @@ async def create_post(
         return {"status": True, "id": result}
 
 
-@router.delete("/delete/")
+@router.delete("/delete")
 async def delete_post(
     post_id: int,
     ioc: FromDishka[InteractorFactory],
@@ -52,7 +52,7 @@ async def delete_post(
         return {"status": await interactor(post_id, user)}
 
 
-@router.put("/update/")
+@router.put("/update")
 async def update_post(
     data: UpdatePostDTO,
     ioc: FromDishka[InteractorFactory],

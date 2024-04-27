@@ -27,7 +27,13 @@ async def authenticate_user(username: str, password: str, ioc: InteractorFactory
     return user
 
 
-@router.post("/token/")
+@router.post(
+    "/token",
+    responses={
+        404: {"response": {"detail": "User not found"}},
+        401: {"response": {"detail": "Incorrect username or password"}},
+    },
+)
 @inject
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
@@ -45,12 +51,12 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.get("/profile/", response_model=UserSchema)
+@router.get("/profile", response_model=UserSchema)
 async def profile(current_user: CurrentUser):
     return current_user
 
 
-@router.post("/register/", status_code=status.HTTP_201_CREATED)
+@router.post("/register", status_code=status.HTTP_201_CREATED)
 @inject
 async def register(data: UserCreateSchema, ioc: FromDishka[InteractorFactory]):
     data.password = get_password_hash(data.password)

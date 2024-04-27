@@ -1,4 +1,7 @@
 from contextlib import asynccontextmanager
+from typing import Optional
+
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,14 +19,14 @@ async def lifespan(app: FastAPI):
     await app.state.dishka_container.close()
 
 
-def create_app() -> FastAPI:
+def create_app(session_maker: Optional[async_sessionmaker] = None) -> FastAPI:
     app = FastAPI(
         title=settings.app_title,
         version=settings.version,
         lifespan=lifespan,
     )
     app.include_router(root_router)
-    ioc = IoC()
+    ioc = IoC(session_maker)
 
     init_di(app, ioc)
 
