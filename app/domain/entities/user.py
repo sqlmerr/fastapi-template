@@ -8,6 +8,6 @@ class User(Base):
     __tablename__ = "users"
 
     username: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[int]
+    password: Mapped[str]
     disabled: Mapped[bool] = mapped_column(default=False, nullable=True)
     registered_at: Mapped[datetime]

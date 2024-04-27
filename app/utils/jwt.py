@@ -1,7 +1,8 @@
 import jwt
 
 from datetime import datetime, timedelta, timezone
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
+from pwdlib.hashers.bcrypt import BcryptHasher
 
 from app.config import settings
 
@@ -9,7 +10,7 @@ from app.config import settings
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = PasswordHash((BcryptHasher(), ))
 
 
 def verify_password(plain_password, hashed_password):

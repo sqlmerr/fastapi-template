@@ -30,7 +30,7 @@ class UpdatePost(Interactor[UpdatePostDTO, bool]):
             raise HTTPException(
                 status.HTTP_403_FORBIDDEN, "You don't have access to update this post"
             )
-        data_dict = data.data.model_dump()
+        data_dict = data.data.model_dump(exclude_none=True)
         result = await self.post_reader_and_updater.update_post(
             data.post_id, data_dict, self.uow
         )

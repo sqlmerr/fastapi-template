@@ -1,5 +1,5 @@
 from typing import Annotated
-from jose.exceptions import JWTError
+from jwt.exceptions import PyJWTError
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -29,7 +29,7 @@ async def get_current_user(
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)
-    except JWTError:
+    except PyJWTError:
         raise credentials_exception
     async with ioc.authenticate() as interactor:
         user = await interactor(

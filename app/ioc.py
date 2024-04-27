@@ -22,28 +22,35 @@ class IoC(InteractorFactory):
 
     @asynccontextmanager
     async def authenticate(self) -> Authenticate:
-        yield Authenticate(self.uow, self.user_gateway)
+        async with self.uow:
+            yield Authenticate(self.uow, self.user_gateway)
 
     @asynccontextmanager
     async def register(self) -> Register:
-        yield Register(self.uow, self.user_gateway)
+        async with self.uow:
+            yield Register(self.uow, self.user_gateway)
 
     @asynccontextmanager
     async def get_post(self) -> GetPost:
-        yield GetPost(self.uow, self.post_gateway)
+        async with self.uow:
+            yield GetPost(self.uow, self.post_gateway)
 
     @asynccontextmanager
     async def get_all_posts(self) -> GetAllPosts:
-        yield GetAllPosts(self.uow, self.post_gateway)
+        async with self.uow:
+            yield GetAllPosts(self.uow, self.post_gateway)
 
     @asynccontextmanager
     async def create_post(self) -> CreatePost:
-        yield CreatePost(self.uow, self.post_gateway, self.user_gateway)
+        async with self.uow:
+            yield CreatePost(self.uow, self.post_gateway, self.user_gateway)
 
     @asynccontextmanager
     async def delete_post(self) -> DeletePost:
-        yield DeletePost(self.uow, self.post_gateway)
+        async with self.uow:
+            yield DeletePost(self.uow, self.post_gateway)
 
     @asynccontextmanager
     async def update_post(self) -> UpdatePost:
-        yield UpdatePost(self.uow, self.post_gateway)
+        async with self.uow:
+            yield UpdatePost(self.uow, self.post_gateway)

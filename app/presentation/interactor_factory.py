@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
+
 from app.application.delete_post import DeletePost
 from app.application.get_all_posts import GetAllPosts
-
 from app.application.authenticate import Authenticate
 from app.application.register import Register
 from app.application.get_post import GetPost

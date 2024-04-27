@@ -1,8 +1,12 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from abc import abstractmethod
 from typing import Protocol
 
 
 class UoW(Protocol):
+    session: AsyncSession
+
     @abstractmethod
     async def commit(self) -> None:
         raise NotImplementedError
