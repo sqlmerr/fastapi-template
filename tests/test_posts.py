@@ -17,7 +17,7 @@ async def test_create_post(client):
     user_token = await login_user(client)
 
     result = await client.post(
-        "/api/v1/posts/create",
+        "/api/v1/posts/",
         json={"text": "test"},
         headers={"Authorization": f"Bearer {user_token}"},
     )
@@ -30,8 +30,7 @@ async def test_get_post(client):
     user_token = await login_user(client)
 
     result = await client.get(
-        "/api/v1/posts/get",
-        params={"post_id": 1},
+        "/api/v1/posts/1",
         headers={"Authorization": f"Bearer {user_token}"},
     )
 
@@ -43,8 +42,7 @@ async def test_get_all_posts(client):
     user_token = await login_user(client)
 
     result = await client.get(
-        "/api/v1/posts/all",
-        params={"post_id": 1},
+        "/api/v1/posts/",
         headers={"Authorization": f"Bearer {user_token}"},
     )
 
@@ -56,13 +54,12 @@ async def test_update_post(client):
     user_token = await login_user(client)
 
     result_update = await client.put(
-        "/api/v1/posts/update",
+        "/api/v1/posts/",
         json={"post_id": 1, "data": {"text": "test2"}},
         headers={"Authorization": f"Bearer {user_token}"},
     )
     result_get = await client.get(
-        "/api/v1/posts/get",
-        params={"post_id": 1},
+        "/api/v1/posts/1",
         headers={"Authorization": f"Bearer {user_token}"},
     )
 
@@ -76,13 +73,12 @@ async def test_delete_post(client):
     user_token = await login_user(client)
 
     result_delete = await client.delete(
-        "/api/v1/posts/delete",
+        "/api/v1/posts/",
         params={"post_id": 1},
         headers={"Authorization": f"Bearer {user_token}"},
     )
     result_get = await client.get(
-        "/api/v1/posts/get",
-        params={"post_id": 1},
+        "/api/v1/posts/1",
         headers={"Authorization": f"Bearer {user_token}"},
     )
 
