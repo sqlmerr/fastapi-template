@@ -1,2 +1,2 @@
 run-dev:
-	uvicorn --factory app.main:create_app --reload
+	poetry run uvicorn --factory app.main:create_app --reload

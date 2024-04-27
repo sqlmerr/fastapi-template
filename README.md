@@ -1,16 +1,22 @@
-# FastAPI template
+# 🤯 FastAPI template
+![GitHub last commit](https://img.shields.io/github/last-commit/sqlmerr/fastapi-template)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/sqlmerr/fastapi-template)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi)
+
+
 This is fastapi template
 
-Currently in development
+Currently, in development
 
-## Install
+## ⬇️ Install
 ```bash
 git clone https://github.com/sqlmerr/fastapi-template
 cd fastapi-template
-pip install -r requirements.txt
+pip install poetry
+poetry install
 ```
 
-## Run
+## 🤖 Run
 ```bash
 make run-dev
 ```
