@@ -8,21 +8,21 @@ from app.application.update_post import UpdatePostDTO
 from app.presentation.interactor_factory import InteractorFactory
 from app.presentation.api.dependencies import get_current_user
 
+from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
-router = APIRouter(prefix="/posts", tags=["posts"])
+
+router = APIRouter(prefix="/posts", tags=["posts"], route_class=DishkaRoute)
 
 
 @router.get("/get/", dependencies=[Depends(get_current_user)])
-async def get_post(
-    post_id: int, ioc: Annotated[InteractorFactory, Depends()]
-) -> PostSchema:
+async def get_post(post_id: int, ioc: FromDishka[InteractorFactory]) -> PostSchema:
     async with ioc.get_post() as interactor:
         return await interactor(post_id)
 
 
 @router.get("/all/")
 async def get_all_posts(
-    ioc: Annotated[InteractorFactory, Depends()],
+    ioc: FromDishka[InteractorFactory],
     user: Annotated[UserSchema, Depends(get_current_user)],
 ) -> list[PostSchema]:
     async with ioc.get_all_posts() as interactor:
@@ -32,7 +32,7 @@ async def get_all_posts(
 @router.post("/create/")
 async def create_post(
     post: PostSchemaCreate,
-    ioc: Annotated[InteractorFactory, Depends()],
+    ioc: FromDishka[InteractorFactory],
     user: Annotated[UserSchema, Depends(get_current_user)],
 ):
     async with ioc.create_post() as interactor:
@@ -45,7 +45,7 @@ async def create_post(
 @router.delete("/delete/")
 async def delete_post(
     post_id: int,
-    ioc: Annotated[InteractorFactory, Depends()],
+    ioc: FromDishka[InteractorFactory],
     user: Annotated[UserSchema, Depends(get_current_user)],
 ):
     async with ioc.delete_post() as interactor:
@@ -55,7 +55,7 @@ async def delete_post(
 @router.put("/update/")
 async def update_post(
     data: UpdatePostDTO,
-    ioc: Annotated[InteractorFactory, Depends()],
+    ioc: FromDishka[InteractorFactory],
     user: Annotated[UserSchema, Depends(get_current_user)],
 ):
     async with ioc.update_post() as interactor:

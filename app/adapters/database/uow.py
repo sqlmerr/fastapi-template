@@ -1,4 +1,3 @@
-from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from app.application.common.uow import UoW

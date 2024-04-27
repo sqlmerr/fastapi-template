@@ -11,6 +11,8 @@ from app.application.authenticate import LoginDTO
 from app.utils.jwt import get_password_hash, verify_password, create_access_token
 from app.presentation.api.dependencies import CurrentUser
 
+from dishka.integrations.fastapi import FromDishka, inject
+
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -26,9 +28,10 @@ async def authenticate_user(username: str, password: str, ioc: InteractorFactory
 
 
 @router.post("/token/")
+@inject
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    ioc: Annotated[InteractorFactory, Depends()],
+    ioc: FromDishka[InteractorFactory],
 ) -> Token:
     async with ioc.authenticate() as interactor:
         user = await interactor(
@@ -48,9 +51,8 @@ async def profile(current_user: CurrentUser):
 
 
 @router.post("/register/", status_code=status.HTTP_201_CREATED)
-async def register(
-    data: UserCreateSchema, ioc: Annotated[InteractorFactory, Depends()]
-):
+@inject
+async def register(data: UserCreateSchema, ioc: FromDishka[InteractorFactory]):
     data.password = get_password_hash(data.password)
     async with ioc.register() as interactor:
         return {"status": await interactor(data)}

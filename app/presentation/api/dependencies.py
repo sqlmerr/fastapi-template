@@ -10,13 +10,16 @@ from app.presentation.interactor_factory import InteractorFactory
 from app.application.authenticate import LoginDTO
 from app.application.schemas.user import UserSchema
 
+from dishka.integrations.fastapi import FromDishka, inject
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token/")
 
 
+@inject
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    ioc: Annotated[InteractorFactory, Depends()],
+    ioc: FromDishka[InteractorFactory],
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
