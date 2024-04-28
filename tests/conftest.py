@@ -14,6 +14,9 @@ from app.domain.entities.user import User  # noqa: F401
 from app.domain.entities.post import Post  # noqa: F401
 from app.application.common.db import Base
 
+if settings.test_db_url is None:
+    raise ValueError("Please set your test db url in environment variables!")
+
 test_engine = create_async_engine(
     settings.test_db_url.get_secret_value(), poolclass=NullPool
 )
