@@ -7,7 +7,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.presentation.api import root_router
-from app.ioc import IoC
 from app.config import settings
 from app.di import init_di
 
@@ -26,9 +25,8 @@ def create_app(session_maker: Optional[async_sessionmaker] = None) -> FastAPI:
         lifespan=lifespan,
     )
     app.include_router(root_router)
-    ioc = IoC(session_maker)
 
-    init_di(app, ioc)
+    init_di(app, session_maker)
 
     if settings.backend_cors_origins:
         app.add_middleware(

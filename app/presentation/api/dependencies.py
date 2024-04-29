@@ -6,8 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app.utils.jwt import decode
 from app.application.schemas.token import TokenData
-from app.presentation.interactor_factory import InteractorFactory
-from app.application.authenticate import LoginDTO
+from app.application.authenticate import LoginDTO, Authenticate
 from app.application.schemas.user import UserSchema
 
 from dishka.integrations.fastapi import FromDishka, inject
@@ -19,7 +18,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 @inject
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    ioc: FromDishka[InteractorFactory],
+    interactor: FromDishka[Authenticate],
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -34,10 +33,9 @@ async def get_current_user(
         token_data = TokenData(username=username)
     except PyJWTError:
         raise credentials_exception
-    async with ioc.authenticate() as interactor:
-        user = await interactor(
-            LoginDTO(username=token_data.username, password=None), False
-        )
+    user = await interactor(
+        LoginDTO(username=token_data.username, password=None), False
+    )
     if user is None:
         raise credentials_exception
     if user.disabled:
