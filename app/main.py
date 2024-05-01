@@ -33,7 +33,7 @@ def create_app(session_maker: Optional[async_sessionmaker] = None) -> FastAPI:
             CORSMiddleware,
             allow_origins=settings.backend_cors_origins,
             allow_methods=("GET", "POST"),
-            allow_headers=("*"),
+            allow_headers=("*",),
             allow_credentials=True,
         )
 
