@@ -28,5 +28,7 @@ class UserSaver(Protocol):
 
 class UserCreator(Protocol):
     @abstractmethod
-    async def create_user(self, user: UserCreateSchema, role: Role, uow: UoW) -> Optional[User]:
+    async def create_user(
+        self, user: UserCreateSchema, role: Role, uow: UoW
+    ) -> Optional[User]:
         raise NotImplementedError

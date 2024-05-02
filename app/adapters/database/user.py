@@ -33,7 +33,9 @@ class UserGateway(UserReader, UserSaver, UserCreator):
         result = await uow.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def create_user(self, user: UserCreateSchema, role: Role, uow: UoW) -> UUID | None:
+    async def create_user(
+        self, user: UserCreateSchema, role: Role, uow: UoW
+    ) -> UUID | None:
         user_dict = user.model_dump()
         if not user_dict:
             return

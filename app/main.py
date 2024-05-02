@@ -5,10 +5,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from app.adapters.database.uow import UnitOfWork
 from app.adapters.database.role import RoleGateway
+from app.adapters.database.uow import UnitOfWork
 from app.application.create_role import CreateRole
-from app.application.register import Register
 from app.config import settings
 from app.di import init_di
 from app.initial_data import create_initial_data

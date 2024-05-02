@@ -12,7 +12,10 @@ from app.application.schemas.user import UserCreateSchema
 
 class Register(Interactor[UserCreateSchema, bool | UUID]):
     def __init__(
-        self, uow: UoW, user_creator_and_reader: Union[UserCreator, UserReader], role_reader: RoleReader
+        self,
+        uow: UoW,
+        user_creator_and_reader: Union[UserCreator, UserReader],
+        role_reader: RoleReader,
     ) -> None:
         self.uow = uow
         self.user_creator_and_reader = user_creator_and_reader

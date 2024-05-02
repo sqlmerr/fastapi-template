@@ -1,5 +1,3 @@
-import asyncio
-
 from typing import Optional
 
 from dishka import Provider, Scope, make_async_container, provide
@@ -13,7 +11,6 @@ from app.adapters.database.uow import UnitOfWork
 from app.adapters.database.user import UserGateway
 from app.application.authenticate import Authenticate
 from app.application.common.db import session_maker
-from app.application.common.uow import UoW
 from app.application.create_post import CreatePost
 from app.application.create_role import CreateRole
 from app.application.delete_post import DeletePost
