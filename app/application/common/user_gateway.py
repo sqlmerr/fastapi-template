@@ -4,6 +4,7 @@ from uuid import UUID
 
 from app.application.common.uow import UoW
 from app.application.schemas.user import UserCreateSchema, UserUpdateSchema
+from app.domain.entities.role import Role
 from app.domain.entities.user import User
 
 
@@ -27,5 +28,5 @@ class UserSaver(Protocol):
 
 class UserCreator(Protocol):
     @abstractmethod
-    async def create_user(self, user: UserCreateSchema, uow: UoW) -> Optional[User]:
+    async def create_user(self, user: UserCreateSchema, role: Role, uow: UoW) -> Optional[User]:
         raise NotImplementedError

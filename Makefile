@@ -6,3 +6,6 @@ test:
 
 isort:
 	poetry run isort .
+
+format:
+	poetry run ruff format .

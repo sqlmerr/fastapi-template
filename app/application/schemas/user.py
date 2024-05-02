@@ -9,6 +9,7 @@ class UserSchema(BaseModel):
     username: str
     registered_at: datetime
     disabled: bool
+    role_id: UUID
 
 
 class UserUpdateSchema(BaseModel):

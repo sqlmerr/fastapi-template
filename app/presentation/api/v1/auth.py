@@ -10,8 +10,7 @@ from app.application.register import Register
 from app.application.schemas.token import Token
 from app.application.schemas.user import UserCreateSchema, UserSchema
 from app.presentation.api.dependencies import CurrentUser
-from app.utils.jwt import (create_access_token, get_password_hash,
-                           verify_password)
+from app.utils.jwt import create_access_token, get_password_hash, verify_password
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
