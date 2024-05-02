@@ -58,4 +58,7 @@ async def profile(current_user: CurrentUser):
 @inject
 async def register(data: UserCreateSchema, interactor: FromDishka[Register]):
     data.password = get_password_hash(data.password)
-    return {"status": await interactor(data)}
+    result = await interactor(data)
+    if isinstance(result, bool):
+        return {"status": result}
+    return {"user_id": result}

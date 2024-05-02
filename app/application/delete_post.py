@@ -1,3 +1,4 @@
+from uuid import UUID
 from fastapi import HTTPException, status
 
 from app.application.common.interactor import Interactor
@@ -10,12 +11,12 @@ class PostReaderAndDeleter(PostReader, PostDeleter):
     pass
 
 
-class DeletePost(Interactor[int, bool]):
+class DeletePost(Interactor[UUID, bool]):
     def __init__(self, uow: UoW, post_deleter_and_reader: PostReaderAndDeleter) -> None:
         self.uow = uow
         self.post_deleter_and_reader = post_deleter_and_reader
 
-    async def __call__(self, data: int, user: UserSchema) -> bool:
+    async def __call__(self, data: UUID, user: UserSchema) -> bool:
         post = await self.post_deleter_and_reader.get_post(data, self.uow)
         if post is None:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Post not found")

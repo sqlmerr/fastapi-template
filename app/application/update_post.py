@@ -1,3 +1,4 @@
+from uuid import UUID
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 
@@ -13,7 +14,7 @@ class PostReaderAndUpdater(PostReader, PostUpdater):
 
 
 class UpdatePostDTO(BaseModel):
-    post_id: int
+    post_id: UUID
     data: PostSchemaUpdate
 
 

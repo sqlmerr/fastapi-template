@@ -1,11 +1,12 @@
 from datetime import datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
+
 from app.application.common.db import Base
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user"
 
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]

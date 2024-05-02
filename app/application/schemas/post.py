@@ -1,12 +1,13 @@
 from typing import Optional
+from uuid import UUID
 
 from pydantic import BaseModel
 
 
 class PostSchema(BaseModel):
-    id: int
+    id: UUID
     text: str
-    author_id: int
+    author_id: UUID
 
 
 class PostSchemaCreate(BaseModel):

@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from uuid import UUID
 from typing import Protocol, Optional
 
 from app.domain.entities.user import User
@@ -8,7 +9,7 @@ from app.application.schemas.user import UserUpdateSchema, UserCreateSchema
 
 class UserReader(Protocol):
     @abstractmethod
-    async def get_user(self, user_id: int, uow: UoW) -> Optional[User]:
+    async def get_user(self, user_id: UUID, uow: UoW) -> Optional[User]:
         raise NotImplementedError
 
     @abstractmethod
@@ -19,7 +20,7 @@ class UserReader(Protocol):
 class UserSaver(Protocol):
     @abstractmethod
     async def save_user(
-        self, user_id: int, user: UserUpdateSchema, uow: UoW
+        self, user_id: UUID, user: UserUpdateSchema, uow: UoW
     ) -> Optional[User]:
         raise NotImplementedError
 

@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
@@ -20,7 +21,7 @@ router = APIRouter(prefix="/posts", tags=["posts"], route_class=DishkaRoute)
 
 
 @router.get("/{post_id}", dependencies=[Depends(get_current_user)])
-async def get_post(post_id: int, interactor: FromDishka[GetPost]) -> PostSchema:
+async def get_post(post_id: UUID, interactor: FromDishka[GetPost]) -> PostSchema:
     return await interactor(post_id)
 
 
@@ -46,7 +47,7 @@ async def create_post(
 
 @router.delete("/")
 async def delete_post(
-    post_id: int,
+    post_id: UUID,
     interactor: FromDishka[DeletePost],
     user: Annotated[UserSchema, Depends(get_current_user)],
 ):
