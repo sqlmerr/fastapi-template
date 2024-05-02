@@ -1,18 +1,16 @@
-import pytest
-
 from typing import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+import pytest
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
+                                    create_async_engine)
 from sqlalchemy.pool import NullPool
 
-from httpx import AsyncClient, ASGITransport
-
-
-from app.main import create_app  # noqa: E402
-from app.config import settings
-from app.domain.entities.user import User  # noqa: F401
-from app.domain.entities.post import Post  # noqa: F401
 from app.application.common.db import Base
+from app.config import settings
+from app.domain.entities.post import Post  # noqa: F401
+from app.domain.entities.user import User  # noqa: F401
+from app.main import create_app  # noqa: E402
 
 if settings.test_db_url is None:
     raise ValueError("Please set your test db url in environment variables!")

@@ -1,10 +1,11 @@
-from fastapi import HTTPException, status
 from uuid import UUID
 
+from fastapi import HTTPException, status
+
 from app.application.common.interactor import Interactor
-from app.application.schemas.post import PostSchema
-from app.application.common.uow import UoW
 from app.application.common.post_gateway import PostReader
+from app.application.common.uow import UoW
+from app.application.schemas.post import PostSchema
 
 
 class GetAllPosts(Interactor[int, list[PostSchema]]):

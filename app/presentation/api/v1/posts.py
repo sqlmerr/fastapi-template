@@ -1,21 +1,17 @@
 from typing import Annotated
 from uuid import UUID
 
+from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter, Depends
 
-from app.application.schemas.post import PostSchema, PostSchemaCreate
-from app.application.schemas.user import UserSchema
-
-from app.application.update_post import UpdatePostDTO, UpdatePost
 from app.application.create_post import CreatePost
 from app.application.delete_post import DeletePost
 from app.application.get_all_posts import GetAllPosts
 from app.application.get_post import GetPost
-
+from app.application.schemas.post import PostSchema, PostSchemaCreate
+from app.application.schemas.user import UserSchema
+from app.application.update_post import UpdatePost, UpdatePostDTO
 from app.presentation.api.dependencies import get_current_user
-
-from dishka.integrations.fastapi import FromDishka, DishkaRoute
-
 
 router = APIRouter(prefix="/posts", tags=["posts"], route_class=DishkaRoute)
 

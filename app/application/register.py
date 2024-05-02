@@ -1,11 +1,12 @@
-from uuid import UUID
 from typing import Union
+from uuid import UUID
+
 from fastapi import HTTPException, status
 
 from app.application.common.interactor import Interactor
 from app.application.common.uow import UoW
-from app.application.schemas.user import UserCreateSchema
 from app.application.common.user_gateway import UserCreator, UserReader
+from app.application.schemas.user import UserCreateSchema
 
 
 class Register(Interactor[UserCreateSchema, bool | UUID]):

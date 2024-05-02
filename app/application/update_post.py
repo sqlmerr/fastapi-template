@@ -1,11 +1,12 @@
 from uuid import UUID
+
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 
 from app.application.common.interactor import Interactor
-from app.application.schemas.post import PostSchemaUpdate
-from app.application.common.uow import UoW
 from app.application.common.post_gateway import PostReader, PostUpdater
+from app.application.common.uow import UoW
+from app.application.schemas.post import PostSchemaUpdate
 from app.application.schemas.user import UserSchema
 
 

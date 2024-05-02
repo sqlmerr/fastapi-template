@@ -1,10 +1,10 @@
 from uuid import UUID
 
 from app.application.common.interactor import Interactor
+from app.application.common.post_gateway import PostCreator
+from app.application.common.uow import UoW
 from app.application.common.user_gateway import UserReader
 from app.application.schemas.post import PostSchemaCreate
-from app.application.common.uow import UoW
-from app.application.common.post_gateway import PostCreator
 from app.application.schemas.user import UserSchema
 
 

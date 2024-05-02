@@ -1,16 +1,14 @@
 from typing import Annotated
-from jwt.exceptions import PyJWTError
-
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-
-from app.utils.jwt import decode
-from app.application.schemas.token import TokenData
-from app.application.authenticate import LoginDTO, Authenticate
-from app.application.schemas.user import UserSchema
 
 from dishka.integrations.fastapi import FromDishka, inject
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from jwt.exceptions import PyJWTError
 
+from app.application.authenticate import Authenticate, LoginDTO
+from app.application.schemas.token import TokenData
+from app.application.schemas.user import UserSchema
+from app.utils.jwt import decode
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 

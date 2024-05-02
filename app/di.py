@@ -1,24 +1,21 @@
 from typing import Optional
 
+from dishka import Provider, Scope, make_async_container, provide
+from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
-
-from dishka import Provider, Scope, provide, make_async_container
-from dishka.integrations.fastapi import (
-    setup_dishka,
-)
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
+from app.adapters.database.post import PostGateway
 from app.adapters.database.uow import UnitOfWork
 from app.adapters.database.user import UserGateway
-from app.adapters.database.post import PostGateway
 from app.application.authenticate import Authenticate
+from app.application.common.db import session_maker
 from app.application.create_post import CreatePost
 from app.application.delete_post import DeletePost
 from app.application.get_all_posts import GetAllPosts
-from app.application.register import Register
 from app.application.get_post import GetPost
+from app.application.register import Register
 from app.application.update_post import UpdatePost
-from app.application.common.db import session_maker
 
 
 class InteractorProvider(Provider):

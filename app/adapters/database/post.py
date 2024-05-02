@@ -1,14 +1,10 @@
-from sqlalchemy import select, insert, delete, update
-from sqlalchemy.exc import OperationalError
-
 from typing import Optional, Union
 
-from app.application.common.post_gateway import (
-    PostReader,
-    PostCreator,
-    PostDeleter,
-    PostUpdater,
-)
+from sqlalchemy import delete, insert, select, update
+from sqlalchemy.exc import OperationalError
+
+from app.application.common.post_gateway import (PostCreator, PostDeleter,
+                                                 PostReader, PostUpdater)
 from app.application.common.uow import UoW
 from app.domain.entities.post import Post
 from app.domain.entities.user import User

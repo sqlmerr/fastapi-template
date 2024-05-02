@@ -1,9 +1,10 @@
 from uuid import UUID
 
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.application.common.db import Base
+
 from .user import User
 
 

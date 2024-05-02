@@ -3,3 +3,6 @@ run-dev:
 
 test:
 	poetry run pytest -v -s
+
+isort:
+	poetry run isort .

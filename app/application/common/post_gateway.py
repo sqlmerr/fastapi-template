@@ -1,9 +1,9 @@
 from abc import abstractmethod
+from typing import Optional, Protocol, Union
 from uuid import UUID
-from typing import Protocol, Optional, Union
 
-from app.domain.entities.post import Post
 from app.application.common.uow import UoW
+from app.domain.entities.post import Post
 from app.domain.entities.user import User
 
 

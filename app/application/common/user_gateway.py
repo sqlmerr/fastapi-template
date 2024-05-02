@@ -1,10 +1,10 @@
 from abc import abstractmethod
+from typing import Optional, Protocol
 from uuid import UUID
-from typing import Protocol, Optional
 
-from app.domain.entities.user import User
 from app.application.common.uow import UoW
-from app.application.schemas.user import UserUpdateSchema, UserCreateSchema
+from app.application.schemas.user import UserCreateSchema, UserUpdateSchema
+from app.domain.entities.user import User
 
 
 class UserReader(Protocol):

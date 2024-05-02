@@ -29,6 +29,7 @@ pwdlib = {extras = ["bcrypt"], version = "^0.2.0"}
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"
 aiosqlite = "^0.20.0"
+isort = "^5.13.2"
 
 
 [tool.poetry.group.tests.dependencies]

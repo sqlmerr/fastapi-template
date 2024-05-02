@@ -1,6 +1,7 @@
-from pydantic import BaseModel
 from typing import Optional
+
 from fastapi import HTTPException, status
+from pydantic import BaseModel
 
 from app.application.common.interactor import Interactor
 from app.application.common.uow import UoW

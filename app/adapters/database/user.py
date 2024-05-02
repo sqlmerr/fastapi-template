@@ -1,12 +1,14 @@
-from uuid import UUID
-from sqlalchemy import select, update, insert
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
-from app.application.common.user_gateway import UserSaver, UserReader, UserCreator
+from sqlalchemy import insert, select, update
+
 from app.application.common.uow import UoW
+from app.application.common.user_gateway import (UserCreator, UserReader,
+                                                 UserSaver)
+from app.application.schemas.user import UserCreateSchema, UserUpdateSchema
 from app.domain.entities.user import User
-from app.application.schemas.user import UserUpdateSchema, UserCreateSchema
 
 
 class UserGateway(UserReader, UserSaver, UserCreator):

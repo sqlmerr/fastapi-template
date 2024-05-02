@@ -1,14 +1,13 @@
 from contextlib import asynccontextmanager
 from typing import Optional
 
-from sqlalchemy.ext.asyncio import async_sessionmaker
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from app.presentation.api import root_router
 from app.config import settings
 from app.di import init_di
+from app.presentation.api import root_router
 
 
 @asynccontextmanager
