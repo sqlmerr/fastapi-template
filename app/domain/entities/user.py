@@ -1,8 +1,11 @@
 from datetime import datetime
+from uuid import UUID
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey
 
 from app.application.common.db import Base
+from .role import Role
 
 
 class User(Base):
@@ -12,3 +15,6 @@ class User(Base):
     password: Mapped[str]
     disabled: Mapped[bool] = mapped_column(default=False, nullable=True)
     registered_at: Mapped[datetime]
+
+    role_id: Mapped[UUID] = mapped_column(ForeignKey("role.id"))
+    role: Mapped[Role] = relationship()
