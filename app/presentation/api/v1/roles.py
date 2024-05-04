@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
@@ -9,7 +10,7 @@ from app.application.get_all_roles import GetAllRoles
 from app.application.get_role import GetRole
 from app.application.schemas.role import RoleCreateSchema, RoleSchema
 
-from ..dependencies import get_current_user
+from ..dependencies import get_current_user, get_current_user_with_permissions
 
 router = APIRouter(prefix="/roles", tags=["roles"], route_class=DishkaRoute)
 
@@ -24,8 +25,13 @@ async def get_roles(interactor: FromDishka[GetAllRoles]) -> list[RoleSchema]:
     return await interactor()
 
 
-@router.post("/", dependencies=[Depends(get_current_user)])
-async def create_role(data: RoleCreateSchema, interactor: FromDishka[CreateRole]):
+@router.post(
+    "/",
+    dependencies=[
+        Depends(get_current_user_with_permissions(["roles:create"])),
+    ]
+)
+async def create_role(data: RoleCreateSchema, interactor: FromDishka[CreateRole]) -> dict[str, Any]:
     return {"role_id": await interactor(data)}
 
 

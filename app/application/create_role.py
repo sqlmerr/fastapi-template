@@ -13,4 +13,5 @@ class CreateRole(Interactor[RoleCreateSchema, UUID | None]):
 
     async def __call__(self, data: RoleCreateSchema) -> UUID | None:
         role_id = await self.role_reader.create_role(data, self.uow)
+        await self.uow.commit()
         return role_id

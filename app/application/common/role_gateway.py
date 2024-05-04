@@ -35,5 +35,5 @@ class RoleCreator(Protocol):
 
 class RoleDeleter(Protocol):
     @abstractmethod
-    async def delete_role(self, role_id: UUID, uow: UoW) -> bool:
+    async def delete_role(self, role_id: UUID | str, uow: UoW) -> bool:
         raise NotImplementedError

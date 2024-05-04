@@ -2,12 +2,8 @@ from uuid import UUID
 
 from sqlalchemy import delete, insert, select, update
 
-from app.application.common.role_gateway import (
-    RoleCreator,
-    RoleDeleter,
-    RoleReader,
-    RoleSaver,
-)
+from app.application.common.role_gateway import (RoleCreator, RoleDeleter,
+                                                 RoleReader, RoleSaver)
 from app.application.common.uow import UoW
 from app.application.schemas.role import RoleCreateSchema, RoleUpdateSchema
 from app.domain.entities.role import Role
@@ -37,7 +33,10 @@ class RoleGateway(RoleReader, RoleCreator, RoleDeleter, RoleSaver):
         await uow.session.execute(stmt)
         return True
 
-    async def delete_role(self, role_id: UUID, uow: UoW) -> bool:
-        stmt = delete(Role).where(Role.id == role_id)
+    async def delete_role(self, role: UUID | str, uow: UoW) -> bool:
+        if isinstance(role, str):
+            stmt = delete(Role).where(Role.name == role)
+        else:
+            stmt = delete(Role).where(Role.id == role)
         await uow.session.execute(stmt)
         return True

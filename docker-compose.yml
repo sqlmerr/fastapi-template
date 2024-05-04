@@ -25,5 +25,6 @@ services:
       - db
     environment:
       - DB_URL=postgresql+asyncpg://postgres:password@db:5432
+      - DEVELOPMENT=false
 volumes:
   app-db-data:

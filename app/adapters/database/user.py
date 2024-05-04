@@ -5,7 +5,8 @@ from uuid import UUID
 from sqlalchemy import insert, select, update
 
 from app.application.common.uow import UoW
-from app.application.common.user_gateway import UserCreator, UserReader, UserSaver
+from app.application.common.user_gateway import (UserCreator, UserReader,
+                                                 UserSaver)
 from app.application.schemas.user import UserCreateSchema, UserUpdateSchema
 from app.domain.entities.role import Role
 from app.domain.entities.user import User

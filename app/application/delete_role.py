@@ -16,10 +16,14 @@ class DeleteRole(Interactor[UUID, bool]):
         self.uow = uow
         self.role_reader_and_deleter = role_reader_and_deleter
 
-    async def __call__(self, data: UUID) -> bool:
-        role = await self.role_reader_and_deleter.get_role(data, self.uow)
+    async def __call__(self, data: UUID | str) -> bool:
+        if isinstance(data, str):
+            role = await self.role_reader_and_deleter.get_role_filters(self.uow, name=data)
+        else:
+            role = await self.role_reader_and_deleter.get_role(data, self.uow)
         if role is None:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Role not found")
         result = await self.role_reader_and_deleter.delete_role(data, self.uow)
+        await self.uow.commit()
 
         return result

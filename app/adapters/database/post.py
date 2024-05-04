@@ -4,12 +4,8 @@ from uuid import UUID
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.exc import OperationalError
 
-from app.application.common.post_gateway import (
-    PostCreator,
-    PostDeleter,
-    PostReader,
-    PostUpdater,
-)
+from app.application.common.post_gateway import (PostCreator, PostDeleter,
+                                                 PostReader, PostUpdater)
 from app.application.common.uow import UoW
 from app.domain.entities.post import Post
 from app.domain.entities.user import User

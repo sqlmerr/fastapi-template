@@ -21,7 +21,9 @@ class Register(Interactor[UserCreateSchema, bool | UUID]):
         self.user_creator_and_reader = user_creator_and_reader
         self.role_reader = role_reader
 
-    async def __call__(self, data: UserCreateSchema) -> bool | UUID:
+    async def __call__(
+        self, data: UserCreateSchema, role_name: str = "user"
+    ) -> bool | UUID:
         if (
             await self.user_creator_and_reader.get_user_filters(
                 self.uow, username=data.username
@@ -30,7 +32,7 @@ class Register(Interactor[UserCreateSchema, bool | UUID]):
         ):
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Username is already taken")
 
-        role = await self.role_reader.get_role_filters(self.uow, name="user")
+        role = await self.role_reader.get_role_filters(self.uow, name=role_name)
         result = await self.user_creator_and_reader.create_user(data, role, self.uow)
         await self.uow.commit()
         if isinstance(result, UUID):

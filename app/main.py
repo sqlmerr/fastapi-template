@@ -7,7 +7,10 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from app.adapters.database.role import RoleGateway
 from app.adapters.database.uow import UnitOfWork
+from app.adapters.database.user import UserGateway
 from app.application.create_role import CreateRole
+from app.application.delete_role import DeleteRole
+from app.application.register import Register
 from app.config import settings
 from app.di import init_di
 from app.initial_data import create_initial_data
@@ -18,9 +21,13 @@ from app.presentation.api import root_router
 async def lifespan(app: FastAPI):
     # Put here your logic
     uow: UnitOfWork = await app.state.dishka_container.get(UnitOfWork)
+    role_gateway = RoleGateway()
     async with uow:
-        await create_initial_data(CreateRole(uow, RoleGateway()))
-        await uow.commit()
+        await create_initial_data(
+            uow,
+            role_gateway,
+            Register(uow, UserGateway(), role_gateway)
+        )
     yield
     await app.state.dishka_container.close()
 

@@ -28,12 +28,7 @@ class Authenticate(Interactor[LoginDTO, UserSchema]):
         )
         if result is None:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
-        user = UserSchema(
-            id=result.id,
-            username=result.username,
-            registered_at=result.registered_at,
-            disabled=result.disabled,
-        )
+        user = UserSchema.model_validate(result, from_attributes=True)
         if (
             password_verify
             and data.password is not None
