@@ -18,7 +18,9 @@ class DeleteRole(Interactor[UUID, bool]):
 
     async def __call__(self, data: UUID | str) -> bool:
         if isinstance(data, str):
-            role = await self.role_reader_and_deleter.get_role_filters(self.uow, name=data)
+            role = await self.role_reader_and_deleter.get_role_filters(
+                self.uow, name=data
+            )
         else:
             role = await self.role_reader_and_deleter.get_role(data, self.uow)
         if role is None:

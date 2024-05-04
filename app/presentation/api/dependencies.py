@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
