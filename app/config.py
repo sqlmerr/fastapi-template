@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     db_url: SecretStr
     test_db_url: Optional[SecretStr] = None
     secret_key: SecretStr
+    admin_password: SecretStr
+
     app_title: str = "FastAPI template"
     version: str = "0.1.0"
     backend_cors_origins: List[str] = ["localhost:3000"]

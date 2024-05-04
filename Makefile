@@ -3,3 +3,9 @@ run-dev:
 
 test:
 	poetry run pytest -v -s
+
+isort:
+	poetry run isort .
+
+format:
+	poetry run ruff format .

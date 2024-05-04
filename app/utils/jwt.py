@@ -1,11 +1,10 @@
-import jwt
-
 from datetime import datetime, timedelta, timezone
+
+import jwt
 from pwdlib import PasswordHash
 from pwdlib.hashers.bcrypt import BcryptHasher
 
 from app.config import settings
-
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30

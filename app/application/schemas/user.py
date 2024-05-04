@@ -1,13 +1,15 @@
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel
 
 
 class UserSchema(BaseModel):
-    id: int
+    id: UUID
     username: str
     registered_at: datetime
     disabled: bool
+    role_id: UUID
 
 
 class UserUpdateSchema(BaseModel):

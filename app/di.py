@@ -1,24 +1,25 @@
 from typing import Optional
 
+from dishka import Provider, Scope, make_async_container, provide
+from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
-
-from dishka import Provider, Scope, provide, make_async_container
-from dishka.integrations.fastapi import (
-    setup_dishka,
-)
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
+from app.adapters.database.post import PostGateway
+from app.adapters.database.role import RoleGateway
 from app.adapters.database.uow import UnitOfWork
 from app.adapters.database.user import UserGateway
-from app.adapters.database.post import PostGateway
 from app.application.authenticate import Authenticate
+from app.application.common.db import session_maker
 from app.application.create_post import CreatePost
+from app.application.create_role import CreateRole
 from app.application.delete_post import DeletePost
 from app.application.get_all_posts import GetAllPosts
-from app.application.register import Register
+from app.application.get_all_roles import GetAllRoles
 from app.application.get_post import GetPost
+from app.application.get_role import GetRole
+from app.application.register import Register
 from app.application.update_post import UpdatePost
-from app.application.common.db import session_maker
 
 
 class InteractorProvider(Provider):
@@ -28,7 +29,32 @@ class InteractorProvider(Provider):
         self.uow = UnitOfWork(another_session_maker or session_maker)
         self.user_gateway = UserGateway()
         self.post_gateway = PostGateway()
+        self.role_gateway = RoleGateway()
         super().__init__()
+
+    @provide(scope=Scope.APP)
+    async def get_uow(self) -> UnitOfWork:
+        return self.uow
+
+    @provide(scope=Scope.REQUEST)
+    async def get_role(self) -> GetRole:
+        async with self.uow:
+            return GetRole(self.uow, self.role_gateway)
+
+    @provide(scope=Scope.REQUEST)
+    async def get_all_roles(self) -> GetAllRoles:
+        async with self.uow:
+            return GetAllRoles(self.uow, self.role_gateway)
+
+    @provide(scope=Scope.REQUEST)
+    async def create_role(self) -> CreateRole:
+        async with self.uow:
+            return CreateRole(self.uow, self.role_gateway)
+
+    @provide(scope=Scope.REQUEST)
+    async def delete_role(self) -> DeletePost:
+        async with self.uow:
+            return DeletePost(self.uow, self.role_gateway)
 
     @provide(scope=Scope.REQUEST)
     async def authenticate(self) -> Authenticate:
@@ -38,7 +64,7 @@ class InteractorProvider(Provider):
     @provide(scope=Scope.REQUEST)
     async def register(self) -> Register:
         async with self.uow:
-            return Register(self.uow, self.user_gateway)
+            return Register(self.uow, self.user_gateway, self.role_gateway)
 
     @provide(scope=Scope.REQUEST)
     async def get_post(self) -> GetPost:

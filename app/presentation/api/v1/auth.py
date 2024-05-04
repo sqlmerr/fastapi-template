@@ -1,18 +1,17 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import Depends, APIRouter, status
+from dishka.integrations.fastapi import FromDishka, inject
+from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from app.application.schemas.user import UserSchema, UserCreateSchema
-from app.application.schemas.token import Token
-from app.application.authenticate import LoginDTO, Authenticate
+from app.application.authenticate import Authenticate, LoginDTO
 from app.application.register import Register
-from app.utils.jwt import get_password_hash, verify_password, create_access_token
+from app.application.schemas.token import Token
+from app.application.schemas.user import UserCreateSchema, UserSchema
 from app.presentation.api.dependencies import CurrentUser
-
-from dishka.integrations.fastapi import FromDishka, inject
-
+from app.utils.jwt import (create_access_token, get_password_hash,
+                           verify_password)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -58,4 +57,7 @@ async def profile(current_user: CurrentUser):
 @inject
 async def register(data: UserCreateSchema, interactor: FromDishka[Register]):
     data.password = get_password_hash(data.password)
-    return {"status": await interactor(data)}
+    result = await interactor(data)
+    if isinstance(result, bool):
+        return {"status": result}
+    return {"user_id": result}

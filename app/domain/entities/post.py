@@ -1,14 +1,17 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from uuid import UUID
+
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.application.common.db import Base
+
 from .user import User
 
 
 class Post(Base):
-    __tablename__ = "posts"
+    __tablename__ = "post"
 
     text: Mapped[str]
 
-    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    author_id: Mapped[UUID] = mapped_column(ForeignKey("user.id"))
     author: Mapped[User] = relationship()
