@@ -15,4 +15,5 @@ class PostSchemaCreate(BaseModel):
 
 
 class PostSchemaUpdate(BaseModel):
+    id: UUID
     text: Optional[str] = None

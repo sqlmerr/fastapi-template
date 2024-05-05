@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from uuid import UUID
 
 from app.application.common.interactor import Interactor
@@ -8,7 +9,13 @@ from app.application.schemas.post import PostSchemaCreate
 from app.application.schemas.user import UserSchema
 
 
-class CreatePost(Interactor[PostSchemaCreate, UUID | bool]):
+@dataclass(frozen=True)
+class CreatePostDTO:
+    data: PostSchemaCreate
+    user: UserSchema
+
+
+class CreatePost(Interactor[CreatePostDTO, UUID | bool]):
     def __init__(
         self, uow: UoW, post_creator: PostCreator, user_reader: UserReader
     ) -> None:
@@ -16,9 +23,9 @@ class CreatePost(Interactor[PostSchemaCreate, UUID | bool]):
         self.post_creator = post_creator
         self.user_reader = user_reader
 
-    async def __call__(self, data: PostSchemaCreate, user: UserSchema) -> UUID | bool:
-        data_dict = data.model_dump()
-        user_db = await self.user_reader.get_user(user.id, self.uow)
+    async def __call__(self, data: CreatePostDTO) -> UUID | bool:
+        data_dict = data.data.model_dump()
+        user_db = await self.user_reader.get_user(data.user.id, self.uow)
         result = await self.post_creator.create_post(data_dict, user_db, self.uow)
 
         return result

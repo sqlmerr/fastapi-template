@@ -1,8 +1,14 @@
 run-dev:
-	poetry run uvicorn --factory app.main:create_app --reload
+	docker compose up
+
+run-dev-build:
+	docker compose up --build
+
+stop:
+	docker compose down
 
 test:
-	poetry run pytest -v -s
+	docker compose exec app pytest -v -s
 
 isort:
 	poetry run isort .

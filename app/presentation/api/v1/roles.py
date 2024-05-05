@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 
 from app.application.create_role import CreateRole
 from app.application.delete_role import DeleteRole
-from app.application.get_all_roles import GetAllRoles
+from app.application.get_all_roles import GetAllRoles, GetAllRolesDTO
 from app.application.get_role import GetRole
 from app.application.schemas.role import RoleCreateSchema, RoleSchema
 
@@ -27,7 +27,7 @@ async def get_role_by_id(role_id: UUID, interactor: FromDishka[GetRole]) -> Role
     "/", dependencies=[Depends(get_current_user_with_permissions(["roles:read"]))]
 )
 async def get_roles(interactor: FromDishka[GetAllRoles]) -> list[RoleSchema]:
-    return await interactor()
+    return await interactor(GetAllRolesDTO())
 
 
 @router.post(

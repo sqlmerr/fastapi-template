@@ -11,7 +11,7 @@ class RoleReaderAndDeleter(RoleReader, RoleDeleter):
     pass
 
 
-class DeleteRole(Interactor[UUID, bool]):
+class DeleteRole(Interactor[UUID | str, bool]):
     def __init__(self, uow: UoW, role_reader_and_deleter: RoleReaderAndDeleter):
         self.uow = uow
         self.role_reader_and_deleter = role_reader_and_deleter

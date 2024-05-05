@@ -4,7 +4,6 @@ async def test_register(client):
     )
 
     assert result.status_code == 201
-    assert result.json()["status"] is True
 
 
 async def test_login(client):

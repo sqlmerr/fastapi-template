@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Union
 from uuid import UUID
 
@@ -10,7 +11,13 @@ from app.application.common.user_gateway import UserCreator, UserReader
 from app.application.schemas.user import UserCreateSchema
 
 
-class Register(Interactor[UserCreateSchema, bool | UUID]):
+@dataclass(frozen=True)
+class RegisterDTO:
+    data: UserCreateSchema
+    role_name: str = "user"
+
+
+class Register(Interactor[RegisterDTO, bool | UUID]):
     def __init__(
         self,
         uow: UoW,
@@ -21,19 +28,24 @@ class Register(Interactor[UserCreateSchema, bool | UUID]):
         self.user_creator_and_reader = user_creator_and_reader
         self.role_reader = role_reader
 
-    async def __call__(
-        self, data: UserCreateSchema, role_name: str = "user"
-    ) -> bool | UUID:
+    async def __call__(self, data: RegisterDTO) -> bool | UUID:
         if (
             await self.user_creator_and_reader.get_user_filters(
-                self.uow, username=data.username
+                self.uow, username=data.data.username
             )
             is not None
         ):
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Username is already taken")
 
-        role = await self.role_reader.get_role_filters(self.uow, name=role_name)
-        result = await self.user_creator_and_reader.create_user(data, role, self.uow)
+        role = await self.role_reader.get_role_filters(self.uow, name=data.role_name)
+        if role is None:
+            raise HTTPException(
+                status.HTTP_404_NOT_FOUND, f"Role {data.role_name} not found"
+            )
+
+        result = await self.user_creator_and_reader.create_user(
+            data.data, role, self.uow
+        )
         await self.uow.commit()
         if isinstance(result, UUID):
             return result

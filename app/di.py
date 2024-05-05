@@ -26,7 +26,11 @@ class InteractorProvider(Provider):
     def __init__(
         self, another_session_maker: Optional[async_sessionmaker] = None
     ) -> None:
-        self.uow = UnitOfWork(another_session_maker or session_maker)
+        self.uow = UnitOfWork(
+            another_session_maker
+            if another_session_maker is not None
+            else session_maker
+        )
         self.user_gateway = UserGateway()
         self.post_gateway = PostGateway()
         self.role_gateway = RoleGateway()
@@ -54,7 +58,7 @@ class InteractorProvider(Provider):
     @provide(scope=Scope.REQUEST)
     async def delete_role(self) -> DeletePost:
         async with self.uow:
-            return DeletePost(self.uow, self.role_gateway)
+            return DeletePost(self.uow, self.post_gateway)
 
     @provide(scope=Scope.REQUEST)
     async def authenticate(self) -> Authenticate:

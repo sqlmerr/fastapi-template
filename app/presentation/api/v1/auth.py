@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.application.authenticate import Authenticate, LoginDTO
-from app.application.register import Register
+from app.application.register import Register, RegisterDTO
 from app.application.schemas.token import Token
 from app.application.schemas.user import UserCreateSchema, UserSchema
 from app.presentation.api.dependencies import CurrentUser
@@ -57,7 +57,7 @@ async def profile(current_user: CurrentUser):
 @inject
 async def register(data: UserCreateSchema, interactor: FromDishka[Register]):
     data.password = get_password_hash(data.password)
-    result = await interactor(data)
+    result = await interactor(RegisterDTO(data))
     if isinstance(result, bool):
         return {"status": result}
     return {"user_id": result}

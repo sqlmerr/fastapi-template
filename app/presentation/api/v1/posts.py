@@ -4,11 +4,12 @@ from uuid import UUID
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter, Depends
 
-from app.application.create_post import CreatePost
-from app.application.delete_post import DeletePost
+from app.application.create_post import CreatePost, CreatePostDTO
+from app.application.delete_post import DeletePost, DeletePostDTO
 from app.application.get_all_posts import GetAllPosts
 from app.application.get_post import GetPost
-from app.application.schemas.post import PostSchema, PostSchemaCreate
+from app.application.schemas.post import (PostSchema, PostSchemaCreate,
+                                          PostSchemaUpdate)
 from app.application.schemas.user import UserSchema
 from app.application.update_post import UpdatePost, UpdatePostDTO
 from app.presentation.api.dependencies import get_current_user_with_permissions
@@ -42,7 +43,7 @@ async def create_post(
         UserSchema, Depends(get_current_user_with_permissions(["posts:create"]))
     ],
 ):
-    result = await interactor(post, user)
+    result = await interactor(CreatePostDTO(post, user))
     if isinstance(result, bool):
         return {"status": result}
     return {"status": True, "id": result}
@@ -56,15 +57,15 @@ async def delete_post(
         UserSchema, Depends(get_current_user_with_permissions(["posts:delete"]))
     ],
 ):
-    return {"status": await interactor(post_id, user)}
+    return {"status": await interactor(DeletePostDTO(post_id, user))}
 
 
 @router.put("/")
 async def update_post(
-    data: UpdatePostDTO,
+    data: PostSchemaUpdate,
     interactor: FromDishka[UpdatePost],
     user: Annotated[
         UserSchema, Depends(get_current_user_with_permissions(["posts:update"]))
     ],
 ):
-    return {"status": await interactor(data, user)}
+    return {"status": await interactor(UpdatePostDTO(data, user))}

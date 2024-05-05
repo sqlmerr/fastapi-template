@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class UoW(Protocol):
-    session: AsyncSession
+    session: AsyncSession | None
 
     @abstractmethod
     async def commit(self) -> None:

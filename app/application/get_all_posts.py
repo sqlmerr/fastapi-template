@@ -8,7 +8,7 @@ from app.application.common.uow import UoW
 from app.application.schemas.post import PostSchema
 
 
-class GetAllPosts(Interactor[int, list[PostSchema]]):
+class GetAllPosts(Interactor[UUID, list[PostSchema]]):
     def __init__(self, uow: UoW, post_reader: PostReader) -> None:
         self.uow = uow
         self.post_reader = post_reader
