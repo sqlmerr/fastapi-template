@@ -16,27 +16,23 @@ readme = "README.md"
 python = "^3.11"
 fastapi = "^0.110.2"
 uvicorn = "^0.29.0"
-sqlalchemy = "^2.0.29"
 alembic = "^1.13.1"
-asyncpg = "^0.29.0"
 dishka = "^1.1.0"
 pydantic-settings = "^2.2.1"
 pyjwt = "^2.8.0"
 python-multipart = "^0.0.9"
 pwdlib = {extras = ["bcrypt"], version = "^0.2.0"}
-
+sqlalchemy = "^2.0.30"
+asyncpg = "^0.29.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"
-aiosqlite = "^0.20.0"
 isort = "^5.13.2"
 pre-commit = "^3.7.0"
 
-
-[tool.poetry.group.tests.dependencies]
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.0"
 httpx = "^0.27.0"
-aiosqlite = "^0.20.0"
-pytest = "^8.1.2"
 pytest-asyncio = "^0.23.6"
 
 [build-system]

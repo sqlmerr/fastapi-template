@@ -4,7 +4,6 @@ from fastapi import HTTPException, status
 
 from app.application.common.interactor import Interactor
 from app.application.common.role_gateway import RoleReader
-from app.application.common.uow import UoW
 from app.application.schemas.role import RoleSchema
 
 
@@ -14,10 +13,9 @@ class GetAllRolesDTO:
     offset: int = 0
 
 
+@dataclass(frozen=True)
 class GetAllRoles(Interactor[GetAllRolesDTO, list[RoleSchema]]):
-    def __init__(self, uow: UoW, role_reader: RoleReader):
-        self.uow = uow
-        self.role_reader = role_reader
+    role_reader: RoleReader
 
     async def __call__(self, data: GetAllRolesDTO) -> list[RoleSchema]:
         roles = await self.role_reader.get_roles(self.uow)

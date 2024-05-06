@@ -5,7 +5,6 @@ from fastapi import HTTPException, status
 
 from app.application.common.interactor import Interactor
 from app.application.common.post_gateway import PostReader, PostUpdater
-from app.application.common.uow import UoW
 from app.application.schemas.post import PostSchemaUpdate
 from app.application.schemas.user import UserSchema
 
@@ -20,10 +19,9 @@ class UpdatePostDTO:
     user: UserSchema
 
 
+@dataclass(frozen=True)
 class UpdatePost(Interactor[UpdatePostDTO, bool]):
-    def __init__(self, uow: UoW, post_reader_and_updater: PostReaderAndUpdater) -> None:
-        self.uow = uow
-        self.post_reader_and_updater = post_reader_and_updater
+    post_reader_and_updater: PostReaderAndUpdater
 
     async def __call__(self, data: UpdatePostDTO) -> bool:
         post = await self.post_reader_and_updater.get_post(data.data.id, self.uow)

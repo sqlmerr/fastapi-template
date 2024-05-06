@@ -1,12 +1,11 @@
 from dataclasses import dataclass
-from typing import Union
+from typing import Protocol
 from uuid import UUID
 
 from fastapi import HTTPException, status
 
 from app.application.common.interactor import Interactor
 from app.application.common.role_gateway import RoleReader
-from app.application.common.uow import UoW
 from app.application.common.user_gateway import UserCreator, UserReader
 from app.application.schemas.user import UserCreateSchema
 
@@ -17,16 +16,14 @@ class RegisterDTO:
     role_name: str = "user"
 
 
+class UserCreatorAndReader(UserCreator, UserReader, Protocol):
+    pass
+
+
+@dataclass(frozen=True)
 class Register(Interactor[RegisterDTO, bool | UUID]):
-    def __init__(
-        self,
-        uow: UoW,
-        user_creator_and_reader: Union[UserCreator, UserReader],
-        role_reader: RoleReader,
-    ) -> None:
-        self.uow = uow
-        self.user_creator_and_reader = user_creator_and_reader
-        self.role_reader = role_reader
+    user_creator_and_reader: UserCreatorAndReader
+    role_reader: RoleReader
 
     async def __call__(self, data: RegisterDTO) -> bool | UUID:
         if (

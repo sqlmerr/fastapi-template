@@ -1,10 +1,10 @@
+from dataclasses import dataclass
 from typing import Optional
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 
 from app.application.common.interactor import Interactor
-from app.application.common.uow import UoW
 from app.application.common.user_gateway import UserReader
 from app.application.schemas.user import UserSchema
 from app.utils.jwt import verify_password
@@ -15,10 +15,9 @@ class LoginDTO(BaseModel):
     password: Optional[str] = None
 
 
+@dataclass(frozen=True)
 class Authenticate(Interactor[LoginDTO, UserSchema]):
-    def __init__(self, uow: UoW, user_reader: UserReader) -> None:
-        self.uow = uow
-        self.user_reader = user_reader
+    user_reader: UserReader
 
     async def __call__(
         self, data: LoginDTO, password_verify: bool = True

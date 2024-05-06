@@ -1,20 +1,20 @@
+from dataclasses import dataclass
+from typing import Protocol
 from uuid import UUID
 
 from fastapi import HTTPException, status
 
 from app.application.common.interactor import Interactor
 from app.application.common.role_gateway import RoleDeleter, RoleReader
-from app.application.common.uow import UoW
 
 
-class RoleReaderAndDeleter(RoleReader, RoleDeleter):
+class RoleReaderAndDeleter(RoleReader, RoleDeleter, Protocol):
     pass
 
 
+@dataclass(frozen=True)
 class DeleteRole(Interactor[UUID | str, bool]):
-    def __init__(self, uow: UoW, role_reader_and_deleter: RoleReaderAndDeleter):
-        self.uow = uow
-        self.role_reader_and_deleter = role_reader_and_deleter
+    role_reader_and_deleter: RoleReaderAndDeleter
 
     async def __call__(self, data: UUID | str) -> bool:
         if isinstance(data, str):
