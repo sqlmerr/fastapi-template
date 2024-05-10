@@ -8,7 +8,7 @@ stop:
 	docker compose down
 
 test:
-	docker compose exec app pytest -v -s
+	pytest -v -s
 
 isort:
 	poetry run isort .
