@@ -4,8 +4,7 @@ from uuid import UUID
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.exc import OperationalError
 
-from app.application.common.post_gateway import (PostCreator, PostDeleter,
-                                                 PostReader, PostUpdater)
+from app.application.common.post_gateway import PostCreator, PostDeleter, PostReader, PostUpdater
 from app.application.common.uow import UoW
 from app.domain.entities.post import Post
 from app.domain.entities.user import User
@@ -22,9 +21,7 @@ class PostGateway(PostReader, PostCreator, PostDeleter, PostUpdater):
         result = await uow.session.execute(stmt)
         return result.all()
 
-    async def create_post(
-        self, data: dict, author: User, uow: UoW
-    ) -> Optional[Union[int, bool]]:
+    async def create_post(self, data: dict, author: User, uow: UoW) -> Optional[Union[int, bool]]:
         try:
             stmt = insert(Post).values(**data, author_id=author.id).returning(Post.id)
             result = await uow.session.execute(stmt)

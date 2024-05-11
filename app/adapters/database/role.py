@@ -2,8 +2,7 @@ from uuid import UUID
 
 from sqlalchemy import delete, insert, select, update
 
-from app.application.common.role_gateway import (RoleCreator, RoleDeleter,
-                                                 RoleReader, RoleSaver)
+from app.application.common.role_gateway import RoleCreator, RoleDeleter, RoleReader, RoleSaver
 from app.application.common.uow import UoW
 from app.application.schemas.role import RoleCreateSchema, RoleUpdateSchema
 from app.domain.entities.role import Role
