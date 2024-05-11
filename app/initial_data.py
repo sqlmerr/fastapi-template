@@ -8,9 +8,9 @@ from app.adapters.database.uow import UnitOfWork
 from app.adapters.database.user import UserGateway
 from app.application.common.db import session_maker
 from app.application.common.uow import UoW
-from app.application.register import Register, RegisterDTO
 from app.application.schemas.role import RoleCreateSchema
 from app.application.schemas.user import UserCreateSchema
+from app.application.user.register import Register, RegisterDTO
 from app.config import settings
 
 

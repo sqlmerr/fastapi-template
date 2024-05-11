@@ -1,6 +1,6 @@
 [tool.ruff]
 line-length = 120
-select = [
+lint.select = [
   "F",
   "E",
   "W",

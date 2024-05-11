@@ -6,10 +6,10 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from app.adapters.auth.jwt import JwtTokenProcessor
 from app.adapters.auth.password import PasswordProcessor
-from app.application.authenticate import Authenticate, LoginDTO
-from app.application.register import Register, RegisterDTO
 from app.application.schemas.token import Token
 from app.application.schemas.user import UserCreateSchema
+from app.application.user.authenticate import Authenticate, LoginDTO
+from app.application.user.register import Register, RegisterDTO
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

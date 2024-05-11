@@ -11,18 +11,18 @@ from app.adapters.database.post import PostGateway
 from app.adapters.database.role import RoleGateway
 from app.adapters.database.uow import UnitOfWork
 from app.adapters.database.user import UserGateway
-from app.application.authenticate import Authenticate
 from app.application.common.db import session_maker
 from app.application.common.id_provider import IdProvider
-from app.application.create_post import CreatePost
-from app.application.create_role import CreateRole
-from app.application.delete_post import DeletePost
-from app.application.get_all_posts import GetAllPosts
-from app.application.get_all_roles import GetAllRoles
-from app.application.get_post import GetPost
-from app.application.get_role import GetRole
-from app.application.register import Register
-from app.application.update_post import UpdatePost
+from app.application.post.create_post import CreatePost
+from app.application.post.delete_post import DeletePost
+from app.application.post.get_all_posts import GetAllPosts
+from app.application.post.get_post import GetPost
+from app.application.post.update_post import UpdatePost
+from app.application.role.create_role import CreateRole
+from app.application.role.get_all_roles import GetAllRoles
+from app.application.role.get_role import GetRole
+from app.application.user.authenticate import Authenticate
+from app.application.user.register import Register
 from app.domain.services.access import AccessService
 
 

@@ -9,11 +9,11 @@ from app.adapters.database.post import PostGateway
 from app.application.common.id_provider import IdProvider
 from app.application.common.uow import UoW
 from app.application.common.user_gateway import UserReader
-from app.application.create_post import CreatePost, CreatePostDTO
-from app.application.delete_post import DeletePost, DeletePostDTO
-from app.application.get_post import GetPost
+from app.application.post.create_post import CreatePost, CreatePostDTO
+from app.application.post.delete_post import DeletePost, DeletePostDTO
+from app.application.post.get_post import GetPost
+from app.application.post.update_post import UpdatePost, UpdatePostDTO
 from app.application.schemas.post import PostSchema, PostSchemaCreate, PostSchemaUpdate
-from app.application.update_post import UpdatePost, UpdatePostDTO
 from app.domain.exceptions.access import AccessDeniedError
 
 POST_ID = uuid.uuid4()

@@ -19,11 +19,8 @@ async def lifespan(app: FastAPI):
 
 
 def create_app(session_maker: Optional[async_sessionmaker] = None) -> FastAPI:
-    app = FastAPI(
-        title=settings.app_title,
-        version=settings.version,
-        lifespan=lifespan,
-    )
+    app = FastAPI(title=settings.app_title, version=settings.version, lifespan=lifespan)
+
     app.add_api_route("/", lambda: {"message": "Hello World"})
     app.include_router(root_router)
 
