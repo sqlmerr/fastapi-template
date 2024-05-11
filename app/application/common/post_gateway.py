@@ -19,9 +19,7 @@ class PostReader(Protocol):
 
 class PostCreator(Protocol):
     @abstractmethod
-    async def create_post(
-        self, data: dict, author: User, uow: UoW
-    ) -> Optional[Union[int, bool]]:
+    async def create_post(self, data: dict, author: User, uow: UoW) -> Optional[Union[int, bool]]:
         raise NotImplementedError
 
 

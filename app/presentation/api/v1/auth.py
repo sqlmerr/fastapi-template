@@ -1,26 +1,29 @@
-from datetime import timedelta
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
+from app.adapters.auth.jwt import JwtTokenProcessor
+from app.adapters.auth.password import PasswordProcessor
 from app.application.authenticate import Authenticate, LoginDTO
 from app.application.register import Register, RegisterDTO
 from app.application.schemas.token import Token
-from app.application.schemas.user import UserCreateSchema, UserSchema
-from app.presentation.api.dependencies import CurrentUser
-from app.utils.jwt import (create_access_token, get_password_hash,
-                           verify_password)
+from app.application.schemas.user import UserCreateSchema
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-async def authenticate_user(username: str, password: str, interactor: Authenticate):
-    user = await interactor(LoginDTO(username=username))
+async def authenticate_user(
+    username: str,
+    password: str,
+    interactor: Authenticate,
+    password_processor: PasswordProcessor,
+):
+    user = await interactor(LoginDTO(id=None, username=username))
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not password_processor.verify_password(password, user.password):
         return False
     return user
 
@@ -36,27 +39,27 @@ async def authenticate_user(username: str, password: str, interactor: Authentica
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     interactor: FromDishka[Authenticate],
+    token_processor: FromDishka[JwtTokenProcessor],
 ) -> Token:
-    user = await interactor(
-        LoginDTO(username=form_data.username, password=form_data.password)
-    )
+    user = await interactor(LoginDTO(id=None, username=form_data.username, password=form_data.password))
 
-    access_token_expires = timedelta(minutes=30)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return Token(access_token=access_token, token_type="bearer")
+    access_token = token_processor.create_access_token(data={"sub": str(user.id)})
+    return Token(access_token=access_token, token_type="Bearer")
 
 
-@router.get("/profile", response_model=UserSchema)
-async def profile(current_user: CurrentUser):
-    return current_user
+# @router.get("/profile", response_model=None)
+# async def profile(id_provider: FromDishka[IdProvider], interactor: FromDishka[Authenticate]):
+#     return await interactor(LoginDTO(id=id_provider.get_current_user_id(), password=None), password_verify=False)
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 @inject
-async def register(data: UserCreateSchema, interactor: FromDishka[Register]):
-    data.password = get_password_hash(data.password)
+async def register(
+    data: UserCreateSchema,
+    interactor: FromDishka[Register],
+    password_processor: FromDishka[PasswordProcessor],
+):
+    data.password = password_processor.get_password_hash(data.password)
     result = await interactor(RegisterDTO(data))
     if isinstance(result, bool):
         return {"status": result}

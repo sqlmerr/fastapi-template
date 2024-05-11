@@ -37,9 +37,7 @@ def uow() -> UoW:
 def post_gateway() -> PostGateway:
     gateway = AsyncMock()
     gateway.create_post = AsyncMock(return_value=POST_ID)
-    gateway.get_post = AsyncMock(
-        return_value=PostSchema(id=POST_ID, text="text", author_id=USER.id)
-    )
+    gateway.get_post = AsyncMock(return_value=PostSchema(id=POST_ID, text="text", author_id=USER.id))
     return gateway
 
 
@@ -51,9 +49,7 @@ def user_gateway() -> UserReader:
 
 
 async def test_create_post_access(uow, post_gateway, user_gateway):
-    interactor = CreatePost(
-        uow=uow, post_creator=post_gateway, user_reader=user_gateway
-    )
+    interactor = CreatePost(uow=uow, post_creator=post_gateway, user_reader=user_gateway)
     result = await interactor(CreatePostDTO(PostSchemaCreate(text="text"), USER))
 
     assert result == POST_ID

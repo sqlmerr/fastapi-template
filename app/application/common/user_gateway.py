@@ -20,15 +20,11 @@ class UserReader(Protocol):
 
 class UserSaver(Protocol):
     @abstractmethod
-    async def save_user(
-        self, user_id: UUID, user: UserUpdateSchema, uow: UoW
-    ) -> Optional[User]:
+    async def save_user(self, user_id: UUID, user: UserUpdateSchema, uow: UoW) -> Optional[User]:
         raise NotImplementedError
 
 
 class UserCreator(Protocol):
     @abstractmethod
-    async def create_user(
-        self, user: UserCreateSchema, role: Role, uow: UoW
-    ) -> Optional[User]:
+    async def create_user(self, user: UserCreateSchema, role: Role, uow: UoW) -> Optional[User]:
         raise NotImplementedError

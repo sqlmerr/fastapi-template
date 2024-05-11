@@ -54,9 +54,7 @@ def downgrade() -> None:
         sa.Column("text", sa.VARCHAR(), autoincrement=False, nullable=False),
         sa.Column("author_id", sa.INTEGER(), autoincrement=False, nullable=False),
         sa.Column("id", sa.INTEGER(), autoincrement=True, nullable=False),
-        sa.ForeignKeyConstraint(
-            ["author_id"], ["users.id"], name="posts_author_id_fkey"
-        ),
+        sa.ForeignKeyConstraint(["author_id"], ["users.id"], name="posts_author_id_fkey"),
         sa.PrimaryKeyConstraint("id", name="posts_pkey"),
     )
     op.create_table(
@@ -64,9 +62,7 @@ def downgrade() -> None:
         sa.Column("id", sa.INTEGER(), autoincrement=True, nullable=False),
         sa.Column("username", sa.VARCHAR(), autoincrement=False, nullable=False),
         sa.Column("password", sa.INTEGER(), autoincrement=False, nullable=False),
-        sa.Column(
-            "registered_at", postgresql.TIMESTAMP(), autoincrement=False, nullable=False
-        ),
+        sa.Column("registered_at", postgresql.TIMESTAMP(), autoincrement=False, nullable=False),
         sa.Column("disabled", sa.BOOLEAN(), autoincrement=False, nullable=True),
         sa.PrimaryKeyConstraint("id", name="users_pkey"),
         sa.UniqueConstraint("username", name="users_username_key"),

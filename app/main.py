@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 from app.config import settings
 from app.di import init_di
 from app.presentation.api import root_router
+from app.presentation.api.exceptions import init_exception_handlers
 
 
 @asynccontextmanager
@@ -26,6 +27,7 @@ def create_app(session_maker: Optional[async_sessionmaker] = None) -> FastAPI:
     app.add_api_route("/", lambda: {"message": "Hello World"})
     app.include_router(root_router)
 
+    init_exception_handlers(app)
     init_di(app, session_maker)
 
     if settings.backend_cors_origins:

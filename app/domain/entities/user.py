@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
@@ -19,3 +20,7 @@ class User(Base):
 
     role_id: Mapped[UUID] = mapped_column(ForeignKey("role.id"))
     role: Mapped[Role] = relationship()
+
+    @property
+    def role_permissions(self) -> List[str]:
+        return self.role.permissions
