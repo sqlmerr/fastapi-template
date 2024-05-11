@@ -1,6 +1,11 @@
 [tool.ruff]
 line-length = 120
-
+lint.select = [
+  "F",
+  "E",
+  "W",
+  "I001"
+]
 
 [tool.pytest.ini_options]
 pythonpath = [

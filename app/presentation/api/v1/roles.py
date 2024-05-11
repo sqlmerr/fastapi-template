@@ -4,10 +4,10 @@ from uuid import UUID
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter
 
-from app.application.create_role import CreateRole
-from app.application.delete_role import DeleteRole
-from app.application.get_all_roles import GetAllRoles, GetAllRolesDTO
-from app.application.get_role import GetRole
+from app.application.role.create_role import CreateRole
+from app.application.role.delete_role import DeleteRole
+from app.application.role.get_all_roles import GetAllRoles, GetAllRolesDTO
+from app.application.role.get_role import GetRole
 from app.application.schemas.role import RoleCreateSchema, RoleSchema
 from app.presentation.api.dependencies import OAuth2Depends
 

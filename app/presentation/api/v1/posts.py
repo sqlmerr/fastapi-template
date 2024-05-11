@@ -4,12 +4,12 @@ from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter
 
 from app.application.common.dto import Pagination
-from app.application.create_post import CreatePost, CreatePostDTO
-from app.application.delete_post import DeletePost, DeletePostDTO
-from app.application.get_all_posts import GetAllPosts
-from app.application.get_post import GetPost
+from app.application.post.create_post import CreatePost, CreatePostDTO
+from app.application.post.delete_post import DeletePost, DeletePostDTO
+from app.application.post.get_all_posts import GetAllPosts
+from app.application.post.get_post import GetPost
+from app.application.post.update_post import UpdatePost, UpdatePostDTO
 from app.application.schemas.post import PostSchema, PostSchemaCreate, PostSchemaUpdate
-from app.application.update_post import UpdatePost, UpdatePostDTO
 from app.presentation.api.dependencies import OAuth2Depends
 
 router = APIRouter(prefix="/posts", tags=["posts"], route_class=DishkaRoute)
