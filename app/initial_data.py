@@ -2,16 +2,16 @@ from contextlib import suppress
 
 from fastapi import HTTPException
 
-from app.adapters.auth.password import PasswordProcessor
-from app.adapters.database.role import RoleGateway
-from app.adapters.database.uow import UnitOfWork
-from app.adapters.database.user import UserGateway
 from app.application.common.db import session_maker
 from app.application.common.uow import UoW
 from app.application.schemas.role import RoleCreateSchema
 from app.application.schemas.user import UserCreateSchema
 from app.application.user.register import Register, RegisterDTO
 from app.config import settings
+from app.infrastructure.auth.password import PasswordProcessor
+from app.infrastructure.gateway.role import RoleGateway
+from app.infrastructure.gateway.uow import UnitOfWork
+from app.infrastructure.gateway.user import UserGateway
 
 
 async def create_initial_data(uow: UoW, role_gateway: RoleGateway, create_user: Register) -> None:

@@ -5,7 +5,6 @@ from unittest.mock import AsyncMock, Mock
 import pytest
 from fastapi import HTTPException
 
-from app.adapters.database.post import PostGateway
 from app.application.common.id_provider import IdProvider
 from app.application.common.uow import UoW
 from app.application.common.user_gateway import UserReader
@@ -15,6 +14,7 @@ from app.application.post.get_post import GetPost
 from app.application.post.update_post import UpdatePost, UpdatePostDTO
 from app.application.schemas.post import PostSchema, PostSchemaCreate, PostSchemaUpdate
 from app.domain.exceptions.access import AccessDeniedError
+from app.infrastructure.gateway.post import PostGateway
 
 POST_ID = uuid.uuid4()
 

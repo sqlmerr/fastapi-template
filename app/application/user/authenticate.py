@@ -4,11 +4,11 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from app.adapters.auth.password import PasswordProcessor
 from app.application.common.interactor import Interactor
 from app.application.common.user_gateway import UserReader
 from app.application.schemas.user import UserSchema
 from app.domain.exceptions.access import AuthenticationError
+from app.infrastructure.auth.password import PasswordProcessor
 
 
 @dataclass(frozen=True)
