@@ -1,17 +1,18 @@
 from typing import Annotated
 
-from dishka.integrations.fastapi import FromDishka, inject
+from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from app.application.schemas.token import Token
-from app.application.schemas.user import UserCreateSchema
+from app.application.common.id_provider import IdProvider
+from app.application.schemas import Token, UserCreateSchema, UserSchema
 from app.application.user.authenticate import Authenticate, LoginDTO
 from app.application.user.register import Register, RegisterDTO
 from app.infrastructure.auth.jwt import JwtTokenProcessor
 from app.infrastructure.auth.password import PasswordProcessor
+from app.presentation.api.dependencies import OAuth2Depends
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/auth", tags=["auth"], route_class=DishkaRoute)
 
 
 async def authenticate_user(
@@ -35,7 +36,6 @@ async def authenticate_user(
         401: {"response": {"detail": "Incorrect username or password"}},
     },
 )
-@inject
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     interactor: FromDishka[Authenticate],
@@ -47,20 +47,19 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="Bearer")
 
 
-# @router.get("/profile", response_model=None)
-# async def profile(id_provider: FromDishka[IdProvider], interactor: FromDishka[Authenticate]):
-#     return await interactor(LoginDTO(id=id_provider.get_current_user_id(), password=None), password_verify=False)
+@router.get("/profile", dependencies=[OAuth2Depends])
+async def profile(interactor: FromDishka[Authenticate], id_provider: FromDishka[IdProvider]) -> UserSchema:
+    return await interactor(LoginDTO(id=id_provider.get_current_user_id(), password=None), password_verify=False)
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
-@inject
 async def register(
     data: UserCreateSchema,
     interactor: FromDishka[Register],
     password_processor: FromDishka[PasswordProcessor],
 ):
     data.password = password_processor.get_password_hash(data.password)
-    result = await interactor(RegisterDTO(data))
+    result = await interactor(RegisterDTO(**data.model_dump()))
     if isinstance(result, bool):
         return {"status": result}
     return {"user_id": result}

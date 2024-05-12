@@ -7,7 +7,7 @@ from app.application.common.id_provider import IdProvider
 from app.application.common.interactor import Interactor
 from app.application.common.post_gateway import PostReader
 from app.application.common.user_gateway import UserReader
-from app.application.schemas.post import PostSchema
+from app.application.schemas import PostSchema
 from app.domain.services.access import AccessService
 
 

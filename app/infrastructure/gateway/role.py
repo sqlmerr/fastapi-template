@@ -1,10 +1,10 @@
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import delete, insert, select, update
 
 from app.application.common.role_gateway import RoleCreator, RoleDeleter, RoleReader, RoleSaver
 from app.application.common.uow import UoW
-from app.application.schemas.role import RoleCreateSchema, RoleUpdateSchema
 from app.domain.entities.role import Role
 
 
@@ -22,13 +22,13 @@ class RoleGateway(RoleReader, RoleCreator, RoleDeleter, RoleSaver):
         result = await uow.session.execute(stmt)
         return result.all()
 
-    async def create_role(self, role: RoleCreateSchema, uow: UoW) -> UUID | None:
-        stmt = insert(Role).values(**role.model_dump()).returning(Role.id)
+    async def create_role(self, role: dict[str, Any], uow: UoW) -> UUID | None:
+        stmt = insert(Role).values(**role).returning(Role.id)
         result = await uow.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def save_role(self, role_id: UUID, data: RoleUpdateSchema, uow: UoW) -> bool:
-        stmt = update(Role).values(**data.model_dump()).where(Role.id == role_id)
+    async def save_role(self, role_id: UUID, data: dict[str, Any], uow: UoW) -> bool:
+        stmt = update(Role).values(**data).where(Role.id == role_id)
         await uow.session.execute(stmt)
         return True
 

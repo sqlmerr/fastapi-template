@@ -4,8 +4,6 @@ from fastapi import HTTPException
 
 from app.application.common.db import session_maker
 from app.application.common.uow import UoW
-from app.application.schemas.role import RoleCreateSchema
-from app.application.schemas.user import UserCreateSchema
 from app.application.user.register import Register, RegisterDTO
 from app.config import settings
 from app.infrastructure.auth.password import PasswordProcessor
@@ -21,7 +19,7 @@ async def create_initial_data(uow: UoW, role_gateway: RoleGateway, create_user: 
     if not user_role:
         print("Creating user role")
         await role_gateway.create_role(
-            RoleCreateSchema(
+            dict(
                 name="user",
                 description="User role",
                 permissions=[
@@ -38,7 +36,7 @@ async def create_initial_data(uow: UoW, role_gateway: RoleGateway, create_user: 
     if not admin_role:
         print("Creating admin role")
         await role_gateway.create_role(
-            RoleCreateSchema(
+            dict(
                 name="admin",
                 description="Admin Role",
                 permissions=["*"],
@@ -49,11 +47,9 @@ async def create_initial_data(uow: UoW, role_gateway: RoleGateway, create_user: 
     with suppress(HTTPException):
         await create_user(
             RegisterDTO(
-                UserCreateSchema(
-                    username="admin",
-                    password=PasswordProcessor().get_password_hash(settings.admin_password.get_secret_value()),
-                ),
-                "admin",
+                username="admin",
+                password=PasswordProcessor().get_password_hash(settings.admin_password.get_secret_value()),
+                role_name="admin",
             )
         )
         print("Created admin")

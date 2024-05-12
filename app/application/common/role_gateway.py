@@ -1,9 +1,8 @@
 from abc import abstractmethod
-from typing import Protocol
+from typing import Any, Protocol
 from uuid import UUID
 
 from app.application.common.uow import UoW
-from app.application.schemas.role import RoleCreateSchema, RoleUpdateSchema
 from app.domain.entities.role import Role
 
 
@@ -23,13 +22,13 @@ class RoleReader(Protocol):
 
 class RoleSaver(Protocol):
     @abstractmethod
-    async def save_role(self, role_id: UUID, data: RoleUpdateSchema, uow: UoW) -> bool:
+    async def save_role(self, role_id: UUID, data: dict[str, Any], uow: UoW) -> bool:
         raise NotImplementedError
 
 
 class RoleCreator(Protocol):
     @abstractmethod
-    async def create_role(self, role: RoleCreateSchema, uow: UoW) -> UUID | None:
+    async def create_role(self, role: dict[str, Any], uow: UoW) -> UUID | None:
         raise NotImplementedError
 
 

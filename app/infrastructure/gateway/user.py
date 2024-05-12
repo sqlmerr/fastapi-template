@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 from uuid import UUID
 
 from sqlalchemy import insert, select, update
@@ -7,7 +7,6 @@ from sqlalchemy.orm import joinedload
 
 from app.application.common.uow import UoW
 from app.application.common.user_gateway import UserCreator, UserReader, UserSaver
-from app.application.schemas.user import UserCreateSchema, UserUpdateSchema
 from app.domain.entities.role import Role
 from app.domain.entities.user import User
 
@@ -21,20 +20,18 @@ class UserGateway(UserReader, UserSaver, UserCreator):
         user = await uow.session.execute(stmt)
         return user.scalar_one_or_none()
 
-    async def save_user(self, user_id: UUID, user: UserUpdateSchema, uow: UoW) -> Optional[User]:
-        user_dict = user.model_dump()
-        if not user_dict:
+    async def save_user(self, user_id: UUID, user: dict[str, Any], uow: UoW) -> Optional[User]:
+        if not user:
             return
 
-        stmt = update(User).values(**user_dict).where(User.id == user_id)
+        stmt = update(User).values(**user).where(User.id == user_id)
         result = await uow.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def create_user(self, user: UserCreateSchema, role: Role, uow: UoW) -> UUID | None:
-        user_dict = user.model_dump()
-        if not user_dict:
+    async def create_user(self, user: dict[str, Any], role: Role, uow: UoW) -> UUID | None:
+        if not user:
             return
 
-        stmt = insert(User).values(**user_dict, registered_at=datetime.utcnow(), role_id=role.id).returning(User.id)
+        stmt = insert(User).values(**user, registered_at=datetime.utcnow(), role_id=role.id).returning(User.id)
         result = await uow.session.execute(stmt)
         return result.scalar_one_or_none()
