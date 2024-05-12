@@ -30,7 +30,7 @@ async def create_post(
     post: PostSchemaCreate,
     interactor: FromDishka[CreatePost],
 ):
-    result = await interactor(CreatePostDTO(post))
+    result = await interactor(CreatePostDTO(text=post.text))
     if isinstance(result, bool):
         return {"status": result}
     return {"status": True, "id": result}
@@ -49,4 +49,4 @@ async def update_post(
     data: PostSchemaUpdate,
     interactor: FromDishka[UpdatePost],
 ):
-    return {"status": await interactor(UpdatePostDTO(data))}
+    return {"status": await interactor(UpdatePostDTO(id=data.id))}

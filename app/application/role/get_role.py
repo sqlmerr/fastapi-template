@@ -7,7 +7,7 @@ from app.application.common.id_provider import IdProvider
 from app.application.common.interactor import Interactor
 from app.application.common.role_gateway import RoleReader
 from app.application.common.user_gateway import UserReader
-from app.application.schemas.role import RoleSchema
+from app.application.schemas import RoleSchema
 from app.domain.services.access import AccessService
 
 

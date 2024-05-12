@@ -12,7 +12,7 @@ from app.application.post.create_post import CreatePost, CreatePostDTO
 from app.application.post.delete_post import DeletePost, DeletePostDTO
 from app.application.post.get_post import GetPost
 from app.application.post.update_post import UpdatePost, UpdatePostDTO
-from app.application.schemas.post import PostSchema, PostSchemaCreate, PostSchemaUpdate
+from app.application.schemas import PostSchema, PostSchemaCreate, PostSchemaUpdate
 from app.domain.exceptions.access import AccessDeniedError
 from app.infrastructure.gateway.post import PostGateway
 

@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from app.application.common.interactor import Interactor
 from app.application.common.user_gateway import UserReader
-from app.application.schemas.user import UserSchema
+from app.application.schemas import UserSchema
 from app.domain.exceptions.access import AuthenticationError
 from app.infrastructure.auth.password import PasswordProcessor
 
