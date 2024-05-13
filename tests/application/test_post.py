@@ -12,7 +12,7 @@ from app.application.post.create_post import CreatePost, CreatePostDTO
 from app.application.post.delete_post import DeletePost, DeletePostDTO
 from app.application.post.get_post import GetPost
 from app.application.post.update_post import UpdatePost, UpdatePostDTO
-from app.application.schemas import PostSchema, PostSchemaCreate, PostSchemaUpdate
+from app.application.schemas import PostSchema
 from app.domain.exceptions.access import AccessDeniedError
 from app.infrastructure.gateway.post import PostGateway
 
@@ -82,7 +82,7 @@ def id_provider() -> IdProvider:
 
 async def test_create_post_access(uow, post_gateway, user_gateway, id_provider):
     interactor = CreatePost(uow=uow, post_creator=post_gateway, user_reader=user_gateway, id_provider=id_provider)
-    result = await interactor(CreatePostDTO(PostSchemaCreate(text="text")))
+    result = await interactor(CreatePostDTO(text="text"))
 
     assert result == POST_ID
 
@@ -93,7 +93,7 @@ async def test_create_post_no_access(uow, post_gateway, user_gateway_no_access, 
     )
 
     with pytest.raises(AccessDeniedError):
-        await interactor(CreatePostDTO(PostSchemaCreate(text="text")))
+        await interactor(CreatePostDTO(text="text"))
 
 
 async def test_get_post_access(uow, post_gateway, user_gateway, id_provider):
@@ -154,7 +154,7 @@ async def test_update_post_access(uow, post_gateway, user_gateway, id_provider):
     interactor = UpdatePost(
         uow=uow, post_reader_and_updater=post_gateway, user_reader=user_gateway, id_provider=id_provider
     )
-    result = await interactor(UpdatePostDTO(PostSchemaUpdate(id=POST_ID, text="new_text")))
+    result = await interactor(UpdatePostDTO(id=POST_ID, text="new_text"))
 
     assert result is True
 
@@ -165,7 +165,7 @@ async def test_update_post_no_access(uow, post_gateway, user_gateway_no_access, 
     )
 
     with pytest.raises(AccessDeniedError):
-        await interactor(UpdatePostDTO(PostSchemaUpdate(id=POST_ID, text="new_text")))
+        await interactor(UpdatePostDTO(id=POST_ID, text="new_text"))
 
 
 async def test_update_post_not_found(uow, user_gateway, id_provider):
@@ -178,4 +178,4 @@ async def test_update_post_not_found(uow, user_gateway, id_provider):
     )
 
     with pytest.raises(HTTPException):
-        await interactor(UpdatePostDTO(PostSchemaUpdate(id=POST_ID, text="new_text")))
+        await interactor(UpdatePostDTO(id=POST_ID, text="new_text"))
